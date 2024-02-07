@@ -1,0 +1,16 @@
+During Turns:
+Players are awarded scorecards based on the accuracy of their predictions during their turn: -
+o	1 scorecard, if the guessed suit is correct, but not the rank 
+o	2 scorecards, if the guessed rank is correct but not the suit 
+o	4 scorecards, if both the rank and the suit guessed are correct 
+o	2 scorecards, if a joker is correctly guessed 
+o	4 scorecards, if it is an actual joker
+
+Last Card:
+- Players who correctly predict the last face-down card win all remaining scorecards.
+- The reward is substantial and reflects the difficulty of the prediction.
+- Bonus should be awarded to: -
+o	The player whose prediction matches the last card
+o	if none of the predictions were correct, then the player who correctly predicted the rank of the last card
+o	if none of the rank predictions were correct either, then the player who correctly predicted the suit of the last card 
+o   if none of the suit predictions were correct either, then the player won the last scorecard

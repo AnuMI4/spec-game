@@ -120,8 +120,11 @@ function revealCardFromGuess(deck, guess, player) {
 // Utility function to calculate points based on the prediction and the actual card
 function calculatePoints(prediction, card) {
     let points = 0;
-    if (card.suit === prediction.suit) points += 1;
-    if (card.value === prediction.value) points += 5;
+    const suitMatch = card.suit === prediction.suit;
+    const valueMatch = card.value === prediction.value;
+    if (suitMatch && !valueMatch) points += 1;
+    if (valueMatch && !suitMatch) points += 2;
+    if (suitMatch && valueMatch) points += 4;
     return points;
 }
 
@@ -144,6 +147,32 @@ function getPlayerInput(player) {
     return { position, cardIdentifier };
 }
 
+// Function to get player's prediction for the last card
+function getPlayerLastCardPrediction(player) {
+    let cardIdentifier = prompt(`Player ${player + 1}, Please predict the last card: (e.g., JN for Joker): `);
+    return cardIdentifier;
+}
+
+// Function to record last card predictions of all players
+function recordLastCardPredictions() {
+    let predictions = [];
+    let currentPlayer = 0;
+
+    for(let i=0; i<playerHands.length; i++){
+        prediction = getPlayerLastCardPrediction(currentPlayer);
+        predictions.push(prediction);
+        currentPlayer += 1;
+    }
+}
+
+// Function to award bonus to the player whose last card prediction is correct
+function awardBonus() {
+    let points = 0;
+    const suitMatch = card.suit === prediction.suit;
+    const valueMatch = card.value === prediction.value;
+    isBonus = suitMatch && valueMatch || suitMatch && !valueMatch || !suitMatch && valueMatch;
+}
+
 // Main game function to initialize the game, handle player turns, and determine the game outcome
 function playGame() {
     let deck = createShowcardsDeck();
@@ -152,11 +181,13 @@ function playGame() {
     shuffleDeck(scorecardsDeck); // Ensure scorecards deck is also shuffled
     displayStartingGrid(deck);
 
+    recordLastCardPredictions();
+
     let scores = [0, 0]; // Initialize scores for both players
     let currentPlayer = 0;
     const winningScore = 173; // Define a winning score if you wish to have one
 
-    while (scores[0] < winningScore && scores[1] < winningScore && deck.length > 0) {
+    while (scores[0] < winningScore && scores[1] < winningScore && deck.length > 1) {
         displayGrid(deck); // Display the current state of the deck
         let guess = getPlayerInput(currentPlayer); // Get the current player's guess
         let revealedCard = revealCardFromGuess(deck, guess, currentPlayer); // Attempt to reveal a card
@@ -169,7 +200,7 @@ function playGame() {
             let points = calculatePoints({suit: suits.find(s => s[0] === predictedSuit), value: values.find(v => v.startsWith(predictedValue))}, revealedCard);
             
             if (points > 0) {
-                console.log(`Player ${currentPlayer + 1} earned ${points} points.`);
+                console.log(`Player ${currentPlayer + 1} earned ${points} scorecards.`);
                 playerHands[currentPlayer].push(...drawScorecards(scorecardsDeck, points)); // Draw scorecards based on points earned
                 scores[currentPlayer] += points; // Update the score for the current player
             } else {
@@ -188,6 +219,11 @@ function playGame() {
         currentPlayer = (currentPlayer + 1) % 2; // Change turns
     }
 
+    if(deck.length == 1) {
+        console.log('Revealing last card');
+        awardBonus();
+    }
+
     // Calculate final scores and determine the winner
     let player1Points = calculateTotalPoints(playerHands[0]);
     let player2Points = calculateTotalPoints(playerHands[1]);
@@ -196,7 +232,6 @@ function playGame() {
     let winner = player1Points > player2Points ? 1 : (player2Points > player1Points ? 2 : 'Tie');
     console.log(`Game over. ${winner === 'Tie' ? 'It is a tie.' : 'Player ' + winner + ' wins!'}`);
 }
-
 
 // Start the game
 playGame();
