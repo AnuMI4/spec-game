@@ -2,6 +2,7 @@
 const suits = ["Hearts", "Diamonds", "Clubs", "Spades"];
 const values = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"];
 let playerHands = [[], []]; // For two players
+let predictions = []; // players last card predictions
 
 // Function to create a basic deck of cards
 function createDeck() {
@@ -155,7 +156,6 @@ function getPlayerLastCardPrediction(player) {
 
 // Function to record last card predictions of all players
 function recordLastCardPredictions() {
-    let predictions = [];
     let currentPlayer = 0;
 
     for(let i=0; i<playerHands.length; i++){
@@ -188,6 +188,7 @@ function playGame() {
     const winningScore = 173; // Define a winning score if you wish to have one
 
     while (scores[0] < winningScore && scores[1] < winningScore && deck.length > 1) {
+        console.log(predictions);
         displayGrid(deck); // Display the current state of the deck
         let guess = getPlayerInput(currentPlayer); // Get the current player's guess
         let revealedCard = revealCardFromGuess(deck, guess, currentPlayer); // Attempt to reveal a card
