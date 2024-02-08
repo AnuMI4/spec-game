@@ -1,12 +1,14 @@
 {
   "name": "spec_game",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node spec_userinput.js",
-    "run": "node spec_automated.js"
+    "run": "node spec_automated.js",
+    "main": "node main.js"
   },
   "dependencies": {
     "prompt-sync": "^4.2.0"
