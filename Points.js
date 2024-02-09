@@ -5,8 +5,10 @@ export default class Points {
         const suitMatch = card.suit === prediction.suit;
         const valueMatch = card.value === prediction.value;
         if (suitMatch && !valueMatch) points += 1;
-        if (valueMatch && !suitMatch) points += 2;
-        if (suitMatch && valueMatch) points += 4;
+        else if (valueMatch && !suitMatch) points += 2;
+        else if (suitMatch && valueMatch) points += 4;
+        else if(card.value === '2' && prediction.value === 'Joker') points += 2;
+    
         return points;
     }
 

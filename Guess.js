@@ -2,7 +2,7 @@ import promptSync from "prompt-sync";
 import Players from "./Players.js";
 const playersObj = new Players();
 const patternPostion = /^[ABCDE][1-5]$/;
-const patternGuess = /^([2JQKA][HDSC])|([J][N])$/
+const patternGuess = /^([JTQKA][HDSC])|([J][N])$/
 let prompt = promptSync({ sigint: true }); // Node.js prompt-sync package for synchronously getting user input
 
 export default class Guess {

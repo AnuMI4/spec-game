@@ -1,7 +1,7 @@
 export default class Card {
     constructor() {
         this.suits = ["Hearts", "Diamonds", "Clubs", "Spades"];
-        this.values = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"];
+        this.values = ["2", "3", "4", "5", "6", "7", "8", "9", "Ten", "Jack", "Queen", "King", "Ace"];
         this.revealedCards = new Set(); // Set to track revealed cards to prevent repeat guesses
     }
 
@@ -44,7 +44,7 @@ export default class Card {
 
     // Function to create a specialized deck for the showcards, including a Joker and other special values
     createShowcardsDeck() {
-        const specialValues = ["2", "10", "Jack", "Queen", "King", "Ace"];
+        const specialValues = ["2", "Ten", "Jack", "Queen", "King", "Ace"];
         let deck = [{ suit: "None", value: "Joker", revealed: false }]; // Start with a Joker card
 
         this.suits.forEach(suit => {
