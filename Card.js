@@ -1,3 +1,5 @@
+import Helper from "./Helper.js";
+
 export default class Card {
     constructor() {
         this.suits = ["Hearts", "Diamonds", "Clubs", "Spades"];
@@ -70,15 +72,12 @@ export default class Card {
 
     // Function to reveal a card based on the player's guess and update the game state accordingly
     revealCardFromGuess(deck, guess, player) {
-        const columnLabels = ['A', 'B', 'C', 'D', 'E'];
-        const row = parseInt(guess.position[1]) - 1; // Convert '1' to 0 index
-        const column = columnLabels.indexOf(guess.position[0]); // Convert 'A' to 0
-        const index = row * 5 + column; // Calculate the card's index in the deck
+        let index = Helper.convertGuessPositionToIndex(guess.position);
 
         if (deck[index] && !deck[index].revealed) {
             deck[index].revealed = true; // Reveal the card
             console.log(`Player ${player + 1} guesses: Position ${guess.position}, Card ${guess.cardIdentifier}`);
-            console.log(`Revealed card at ${guess.position}: ${deck[index].value} of ${deck[index].suit}`);
+            console.log(`Revealed card at ${guess.position}: ${deck[index].value} of ${deck[index].suit}\n\n`);
             this.markCardAsRevealed(guess.position, deck[index].value[0] + deck[index].suit[0]);
             return deck[index]; // Return the revealed card
         } else {
