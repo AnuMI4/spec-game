@@ -4,7 +4,7 @@ export default class Card {
     constructor() {
         this.suits = ["Hearts", "Diamonds", "Clubs", "Spades"];
         this.values = ["2", "3", "4", "5", "6", "7", "8", "9", "Ten", "Jack", "Queen", "King", "Ace"];
-        this.revealedCards = new Set(); // Set to track revealed cards to prevent repeat guesses
+        // this.revealedCards = new Set(); // Set to track revealed cards to prevent repeat guesses
     }
 
     // Function to create a basic deck of cards
@@ -66,9 +66,9 @@ export default class Card {
     }
 
     // Function to mark a card as revealed based on its position and identifier
-    markCardAsRevealed(position, cardIdentifier) {
-        this.revealedCards.add(position + cardIdentifier);
-    }
+    // markCardAsRevealed(position, cardIdentifier) {
+    //     this.revealedCards.add(position + cardIdentifier);
+    // }
 
     // Function to reveal a card based on the player's guess and update the game state accordingly
     revealCardFromGuess(deck, guess, player) {
@@ -76,9 +76,9 @@ export default class Card {
 
         if (deck[index] && !deck[index].revealed) {
             deck[index].revealed = true; // Reveal the card
-            console.log(`Player ${player + 1} guesses: Position ${guess.position}, Card ${guess.cardIdentifier}`);
-            console.log(`Revealed card at ${guess.position}: ${deck[index].value} of ${deck[index].suit}\n\n`);
-            this.markCardAsRevealed(guess.position, deck[index].value[0] + deck[index].suit[0]);
+            console.log(`\nPlayer ${player + 1} guesses: Position ${guess.position}, Card ${guess.cardIdentifier}`);
+            console.log(`Revealed card at ${guess.position}: ${deck[index].value} of ${deck[index].suit}\n`);
+            Helper.markCardAsRevealed(guess.position, deck[index].value[0] + deck[index].suit[0]);
             return deck[index]; // Return the revealed card
         } else {
             return null; // No new card was revealed

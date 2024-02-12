@@ -27,7 +27,7 @@ export default class Game {
             // console.log(guessObj.predictions);
             gridObj.displayStartingGrid(deck);
             gridObj.displayGrid(deck); // Display the current state of the deck
-            let guess = guessObj.getPlayerInput(deck, currentPlayer); // Get the current player's guess
+            let guess = guessObj.getPlayerInput(currentPlayer); // Get the current player's guess
             let revealedCard = cardObj.revealCardFromGuess(deck, guess, currentPlayer); // Attempt to reveal a card
             if (revealedCard) {
                 // If a card was successfully revealed, calculate the points
@@ -36,15 +36,15 @@ export default class Game {
                 // Adjust prediction formatting if necessary, depending on how cardIdentifier is structured
                 let suitExtracted = cardObj.suits.find(s => s[0] === predictedSuit) || "None";
                 let valueExtracted = suitExtracted === "None" && predictedValue == "J" ? "Joker" : cardObj.values.find(v => v.startsWith(predictedValue));
-                let retreivedCard = {suit: suitExtracted, value: valueExtracted};
+                let retreivedCard = { suit: suitExtracted, value: valueExtracted };
                 let points = pointsObj.calculatePoints(retreivedCard, revealedCard);
-                
-                if (points > 0) {
+
+                if (points > 0 && scorecardsDeck.length) {
                     playersObj.playerHands[currentPlayer].push(...cardObj.drawScorecards(scorecardsDeck, points)); // Draw scorecards based on points earned
                     scores[currentPlayer] += points; // Update the score for the current player
                     console.log(`Player ${currentPlayer + 1} earned ${points} scorecards. \nPlayer ${currentPlayer + 1} total cards: ${playersObj.playerHands[currentPlayer].length}`);
                 } else {
-                    console.log("No points earned. Try again.");
+                    console.log("No points earned.");
                 }
             } else {
                 console.log("No card revealed. Try again.");
@@ -56,11 +56,11 @@ export default class Game {
                 break; // End the game if all cards are revealed
             }
             // console.log(playersObj.playerHands[currentPlayer]);
-            console.log(`Remaining scorecards on deck: ${scorecardsDeck.length}.`);
+            console.log(`\n***** Remaining scorecards on deck: ${scorecardsDeck.length}. *****`);
             currentPlayer = (currentPlayer + 1) % 2; // Change turns
         }
 
-        if(deck.length == 1) {
+        if (deck.length == 1) {
             console.log('Revealing last card');
             pointsObj.awardBonusawardBonus();
         }
