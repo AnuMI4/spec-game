@@ -34,4 +34,12 @@ export default class Helper {
         const index = row * 5 + column; // Calculate the card's index in the deck
         return index;
     }
+
+    static convertIndexToGuessPosition(index) {
+        const columnLabels = ['A', 'B', 'C', 'D', 'E'];
+        const row = Math.floor(index / 5); // Calculate row number
+        const column = index % 5; // Calculate column index
+        const position = columnLabels[column] + row; // Concatenate column label and row number
+        return position;
+    }
 }

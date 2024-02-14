@@ -22,7 +22,7 @@ export default class Card {
     createScorecardsDeck() {
         let deck = [];
         // Add numerals from Three to Nine for each suit
-        ["Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"].forEach(value => {
+        ["3", "4", "5", "6", "7", "8", "9"].forEach(value => {
             this.suits.forEach(suit => {
                 deck.push({ suit, value });
             });
@@ -83,5 +83,13 @@ export default class Card {
         } else {
             return null; // No new card was revealed
         }
+    }
+
+    revealLastCard (deck) {
+        let index = deck.map(card => card.revealed).indexOf(false);
+        let position = Helper.convertIndexToGuessPosition(index);
+        deck[index].revealed = true;
+        Helper.markCardAsRevealed(position, deck[index].value[0] + deck[index].suit[0]);
+        return deck[index];
     }
 }
