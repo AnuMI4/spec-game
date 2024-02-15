@@ -3,6 +3,7 @@ import Grid from "./Grid.js";
 import Guess from "./Guess.js";
 import Points from "./Points.js"
 import Players from "./Players.js";
+import Helper from "./Helper.js";
 const cardObj = new Card();
 const gridObj = new Grid();
 const guessObj = new Guess();
@@ -12,7 +13,7 @@ const playersObj = new Players();
 export default class Game {
 
     // Main game function to initialize the game, handle player turns, and determine the game outcome
-    playGame() {
+    playGame() {    
         let deck = cardObj.createShowcardsDeck();
         let scorecardsDeck = cardObj.createScorecardsDeck();
         cardObj.shuffleDeck(deck); // Ensure the deck is shuffled before playing
@@ -126,7 +127,7 @@ export default class Game {
         let player2Points = pointsObj.calculateTotalPoints(playersObj.playerHands[1]);
         console.log(`Final scores - Player 1: ${player1Points}, Player 2: ${player2Points}`);
 
-        let winner = player1Points > player2Points ? 1 : (player2Points > player1Points ? 2 : 'Tie');
-        console.log(`Game over. ${winner === 'Tie' ? 'It is a tie.' : 'Player ' + winner + ' wins!'}`);
+        let winner = player1Points > player2Points ? 1 : (player2Points > player1Points ? 2 : 1);// 1 for now as we want to show atleast one winner
+        Helper.showWinner(winner);
     }
 }
