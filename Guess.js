@@ -22,14 +22,14 @@ export default class Guess {
             position = position.toUpperCase();
             isPositionValid = patternPostion.test(position) ? true : false;
             if (!isPositionValid) {
-                console.log('Invalid Position entered');
+                console.log('\n*INVALID POSITION ENTERED*\n');
                 // SKIP CHECKING THE POSITION REVEALED LOGIC
                 continue;
             }
             // Returns true of position is revealed so inverse the result
             isPositionValid = !Helper.postionRevealed(position);
             if (!isPositionValid) {
-                console.log('Position already revealed');
+                console.log('\n*POSITION ALREADY REVEALED*\n');
             }
         }
         while (!isGuessValid) {
@@ -37,15 +37,23 @@ export default class Guess {
             cardIdentifier = cardIdentifier.toUpperCase();
             isGuessValid = patternGuess.test(cardIdentifier) ? true : false;
             if (!isGuessValid) {
-                console.log('Invalid Guess entered');
+                console.log('\nINVALID GUESS ENTERED\n');
                 // SKIP CHECKING THE CARD REVEALED LOGIC
                 continue;
             }
             // Returns true of card is revealed or 5 jokers are revealed so inverse the result
             isGuessValid = !Helper.cardRevealed(cardIdentifier);
             if (!isGuessValid) {
-                console.log(`Invalid Guess. Try Again`);
+                console.log(`\n*THIS CARD IS ALREADY REVEALED. TRY AGAIN*\n`);
+                continue;
             }
+
+            // Check for previous user call, can't call same guess as previous user
+            isGuessValid = !Helper.lastGuessMatch(cardIdentifier);
+            if (!isGuessValid) {
+                console.log('\n*YOU CAN NOT GUESS SAME CARD AS PREVIOUS PLAYER*\n');
+            }
+            Helper.storeLastGuess(cardIdentifier);
         }
         return { position, cardIdentifier };
     }
@@ -59,7 +67,7 @@ export default class Guess {
             cardIdentifier = cardIdentifier.toUpperCase();
             isPredictionValid = patternGuess.test(cardIdentifier) ? true : false;
             if (!isPredictionValid) {
-                console.log('Invalid Prediction entered');
+                console.log('\nInvalid Prediction entered\n');
             }
         }
         return cardIdentifier;
@@ -71,15 +79,21 @@ export default class Guess {
         let prediction = null;
         for (let i = 0; i < playersObj.playerHands.length; i++) {
             prediction = this.getPlayerLastCardPrediction(currentPlayer);
-            if (!this.predictions.includes(prediction)) {
+            // Exact prediction is not allowed, same suit is not allowed
+            if (!this.predictions.includes(prediction) && this.checkSuitOfOtherPredicitons(prediction)) {
                 this.predictions.push(prediction);
                 currentPlayer += 1;
             }
             else {
-                console.log(`***** This card is already predicted *****`);
+                console.log(`\n***** This card is already predicted, or try a different Suit *****\n`);
                 // Only move forward if prediction is correct and different from other players
                 i--;
             }
         }
+    }
+
+    // Function to check if suit has already been predicted by other players
+    checkSuitOfOtherPredicitons(prediction) {
+        return !!!this.predictions.filter(x => x[1] == prediction[1]).length;
     }
 }

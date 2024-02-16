@@ -4,7 +4,6 @@ export default class Card {
     constructor() {
         this.suits = ["Hearts", "Diamonds", "Clubs", "Spades"];
         this.values = ["2", "3", "4", "5", "6", "7", "8", "9", "Ten", "Jack", "Queen", "King", "Ace"];
-        // this.revealedCards = new Set(); // Set to track revealed cards to prevent repeat guesses
     }
 
     // Function to create a basic deck of cards
@@ -64,11 +63,6 @@ export default class Card {
             [deck[i], deck[j]] = [deck[j], deck[i]]; // Swap the ith and jth cards
         }
     }
-
-    // Function to mark a card as revealed based on its position and identifier
-    // markCardAsRevealed(position, cardIdentifier) {
-    //     this.revealedCards.add(position + cardIdentifier);
-    // }
 
     // Function to reveal a card based on the player's guess and update the game state accordingly
     revealCardFromGuess(deck, guess, player) {

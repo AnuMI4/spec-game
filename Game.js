@@ -13,7 +13,7 @@ const playersObj = new Players();
 export default class Game {
 
     // Main game function to initialize the game, handle player turns, and determine the game outcome
-    playGame() {    
+    playGame() {
         let deck = cardObj.createShowcardsDeck();
         let scorecardsDeck = cardObj.createScorecardsDeck();
         cardObj.shuffleDeck(deck); // Ensure the deck is shuffled before playing
@@ -25,7 +25,7 @@ export default class Game {
         let lastPlayerToScore = null;
         const winningScore = 173; // Define a winning score if you wish to have one
         while (scores[0] < winningScore && scores[1] < winningScore && deck.length > 1) {
-            console.log(deck.filter(card => card.revealed).length);
+            // console.log(deck.filter(card => card.revealed).length);
             // console.log(guessObj.predictions);
             gridObj.displayStartingGrid(deck);
             gridObj.displayGrid(deck); // Display the current state of the deck
@@ -46,29 +46,29 @@ export default class Game {
                 if (points > 0 && scorecardsDeck.length) {
                     playersObj.playerHands[currentPlayer].push(...cardObj.drawScorecards(scorecardsDeck, points)); // Draw scorecards based on points earned
                     scores[currentPlayer] += points; // Update the score for the current player
-                    console.log(`Player ${currentPlayer + 1} earned ${points} scorecards. \nPlayer ${currentPlayer + 1} total cards: ${playersObj.playerHands[currentPlayer].length}`);
+                    console.log(`PLAYER ${currentPlayer + 1} EARNED ${points} SCORECARDS. \nPLAYER ${currentPlayer + 1} TOTAL CARDS: ${playersObj.playerHands[currentPlayer].length}\n`);
                     lastPlayerToScore = currentPlayer;
                 } else {
-                    console.log("No points earned.");
+                    console.log("*NO POINTS EARNED*");
                 }
             } else {
-                console.log("No card revealed. Try again.");
+                console.log("NO CARD REVEALED. TRY AGAIN");
                 continue; // Skip the turn change if the guess was incorrect or the card was already revealed
             }
 
             // Check if last card is remaining
             if (deck.filter(card => card.revealed).length === 24) {
-                console.log('Revealing last card');
+                console.log('\nREVEALING LAST CARD');
                 let revealedCard = cardObj.revealLastCard(deck);
 
-                let predictedSuit =  null;
-                let predictedValue =  null; 
-                let suitExtracted =  null;
+                let predictedSuit = null;
+                let predictedValue = null;
+                let suitExtracted = null;
                 let valueExtracted = null;
                 let retreivedCard = null;
 
                 // checking if any of the predictions matched the last card
-                for (let i=0; i<=playersObj.playerHands.length; i++) {
+                for (let i = 0; i <= playersObj.playerHands.length; i++) {
                     predictedSuit = guessObj.predictions[i].slice(-1); // Last character for suit
                     predictedValue = guessObj.predictions[i].slice(0, -1); // All except last character for value
                     suitExtracted = cardObj.suits.find(s => s[0] === predictedSuit) || "None";
@@ -80,7 +80,7 @@ export default class Game {
                         playersObj.playerHands[i].push(...cardObj.drawScorecards(scorecardsDeck, points));
                         scores[i] += points;
                         console.log(playersObj.playerHands[i]);
-                        console.log(`Bonus is awarded to Player ${i + 1} predicting correct card`);
+                        console.log(`\nBONUS IS AWARDED TO PLAYER ${i + 1} PREDICTING CORRECT CARD\n`);
                         break;
                     }
 
@@ -89,7 +89,7 @@ export default class Game {
                         playersObj.playerHands[i].push(...cardObj.drawScorecards(scorecardsDeck, points));
                         scores[i] += points;
                         console.log(playersObj.playerHands[i]);
-                        console.log(`Bonus is awarded to Player ${i + 1} predicting correct rank`);
+                        console.log(`\nBONUS IS AWARDED TO PLAYER ${i + 1} PREDICITING CORRECT RANK\n`);
                         break;
                     }
 
@@ -98,7 +98,7 @@ export default class Game {
                         playersObj.playerHands[i].push(...cardObj.drawScorecards(scorecardsDeck, points));
                         scores[i] += points;
                         console.log(playersObj.playerHands[i]);
-                        console.log(`Bonus is awarded to Player ${i + 1} predicting correct suit`);
+                        console.log(`\nBONUS IS AWARDED TO PLAYER ${i + 1} PREDICTING CORRECT SUIT\n`);
                         break;
                     }
 
@@ -107,7 +107,7 @@ export default class Game {
                         playersObj.playerHands[i].push(...cardObj.drawScorecards(scorecardsDeck, points));
                         scores[i] += points;
                         console.log(playersObj.playerHands[i]);
-                        console.log(`Bonus is awarded to Player ${i + 1} as this player won the last scorecard`);
+                        console.log(`\nBONUS IS AWARDED TO PLAYER ${i + 1} AS THIS PLAYER WON THE LAST SCORECARD\n`);
                         break;
                     }
                 }
@@ -118,7 +118,9 @@ export default class Game {
                 break; // End the game if all cards are revealed
             }
             // console.log(playersObj.playerHands[currentPlayer]);
-            console.log(`\n***** Remaining scorecards on deck: ${scorecardsDeck.length}. *****`);
+            console.log('\n' + '*'.repeat(45));
+            console.log(`***** REMAINING SCORECARDS ON DECK: ${scorecardsDeck.length}. *****`);
+            console.log('*'.repeat(45) + '\n');
             currentPlayer = (currentPlayer + 1) % 2; // Change turns
         }
 

@@ -2,6 +2,7 @@ export default class Helper {
     static revealedCards = new Set(); // Set to track revealed cards to prevent repeat guesses
     static revealedJokers = new Set(); // Set to track revealed cards to prevent repeat guesses
     static revealedPositions = new Set(); // Set to track revealed cards to prevent repeat guesses
+    static lastGuess = null;
 
     // Function to mark a card as revealed based on its position and identifier
     static markCardAsRevealed(position, cardIdentifier) {
@@ -70,10 +71,18 @@ export default class Helper {
         const padding = ' '.repeat(paddingLength + 8);
     
         // Constructing the output lines
-        console.log(`${reset}${outerPadding}${reset}`);
+        console.log(`\n\n\n\n${reset}${outerPadding}${reset}`);
         // Ensuring message is centered by adjusting padding around the message
         console.log(`${reset}${padding}${background}${message}${reset}${padding}`);
-        console.log(`${reset}${outerPadding}${reset}`);
+        console.log(`${reset}${outerPadding}${reset}\n\n\n\n`);
+    }
+
+    static storeLastGuess(cardIdentifier){
+        this.lastGuess = cardIdentifier;
+    }
+
+    static lastGuessMatch(cardIdentifier){
+        return this.lastGuess === cardIdentifier;
     }
     
 }
