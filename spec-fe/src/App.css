@@ -59,9 +59,8 @@ h1 {
   border: 1px solid #cccccc;
   border-radius: 5px;
   padding: 20px;
-  text-align: center;
-  font-size: 16px;
   height: 90px;
+  width: 50px;
   position: relative;
 }
 
