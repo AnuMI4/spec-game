@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node spec_userinput.js",
+    "start": "node app.js",
     "run": "node spec_automated.js",
     "main": "node main.js"
   },
