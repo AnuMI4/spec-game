@@ -50,5 +50,6 @@ import card_AC from 'cardsJS/cards/AC.svg';
 import card_AD from 'cardsJS/cards/AD.svg';
 import card_AH from 'cardsJS/cards/AH.svg';
 import card_AS from 'cardsJS/cards/AS.svg';
+import card_JN from '../assets/Cards-Joker-Black.svg';
 
-export default { card_2C, card_2D, card_2H, card_2S, card_3C, card_3D, card_3H, card_3S, card_4C, card_4D, card_4H, card_4S, card_5C, card_5D, card_5H, card_5S, card_6C, card_6D, card_6H, card_6S, card_7C, card_7D, card_7H, card_7S, card_8C, card_8D, card_8H, card_8S, card_9C, card_9D, card_9H, card_9S, card_TC, card_TD, card_TH, card_TS, card_KC, card_KD, card_KH, card_KS, card_QC, card_QD, card_QH, card_QS, card_JC, card_JD, card_JH, card_JS, card_AC, card_AD, card_AH, card_AS };
+export default { card_2C, card_2D, card_2H, card_2S, card_3C, card_3D, card_3H, card_3S, card_4C, card_4D, card_4H, card_4S, card_5C, card_5D, card_5H, card_5S, card_6C, card_6D, card_6H, card_6S, card_7C, card_7D, card_7H, card_7S, card_8C, card_8D, card_8H, card_8S, card_9C, card_9D, card_9H, card_9S, card_TC, card_TD, card_TH, card_TS, card_KC, card_KD, card_KH, card_KS, card_QC, card_QD, card_QH, card_QS, card_JC, card_JD, card_JH, card_JS, card_AC, card_AD, card_AH, card_AS, card_JN };

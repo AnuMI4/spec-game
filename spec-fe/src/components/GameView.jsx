@@ -6,10 +6,13 @@ import ShowCards from './ShowCards';
 
 function GameView() {
   const [clickedCards, setClickedCards] = useState([]);
+  const [currentPlayer, setCurrentPlayer] = useState(1);
 
   const handleCardClick = (index) => {
+    const userInput = prompt('Guess the card (e.g. Ace of Spades AS, JR for Joker): ');
     if (!clickedCards.includes(index)) {
       setClickedCards([...clickedCards, index]);
+      setCurrentPlayer(currentPlayer === 1 ? 2 : 1);
     }
   };
   
@@ -37,8 +40,13 @@ function GameView() {
   };
 
   return (
-    <div className="grid-container">
-      {renderGridItems()}
+    <div className="game-container">
+      <div className="turn-indicator">
+        <h2>Player {currentPlayer}'s Turn</h2>
+      </div>
+      <div className="grid-container">
+        {renderGridItems()}
+      </div>
     </div>
   );
 }

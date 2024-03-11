@@ -15,7 +15,9 @@ function LandingPage () {
       <h1>Welcome to the Game</h1>
       <div className="button-container">
         <button className="play-btn">Play with Computer</button>
-        <Link to="/player-vs-player"><button className="play-btn">Player vs Player</button></Link>
+        <Link to="/player-vs-player"><button className="play-btn">2 Player Game</button></Link>
+        <button className="play-btn">3 Player Game</button>
+        <button className="play-btn">4 Player Game</button>
       </div>
     </div>
   </div>
