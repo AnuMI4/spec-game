@@ -16,6 +16,8 @@ export const GameProvider = ({ children }) => {
   const [lastGuesses, setLastGuesses] = useState({});
   const [gameStarted, setGameStarted] = useState(false);
   const [scores, setScores] = useState({ player1: 0, player2: 0 });
+  const [isGameOver, setIsGameOver] = useState(false);
+  const [winner, setWinner] = useState(null);
 
   // Simulated card creation logic based on your Card.js
   const suits = useMemo(() => ["Hearts", "Diamonds", "Clubs", "Spades"], []);
@@ -92,6 +94,32 @@ export const GameProvider = ({ children }) => {
     setCurrentPlayer((prevPlayer) => (prevPlayer === 1 ? 2 : 1));
   };
 
+  const checkEndGame = () => {
+    const allCardsRevealed = deck.every((card) => card.revealed);
+    if (allCardsRevealed) {
+      setIsGameOver(true);
+      const winningScore = Math.max(scores.player1, scores.player2);
+      const winner = Object.keys(scores).find(
+        (key) => scores[key] === winningScore
+      );
+      setWinner(winner);
+    }
+  };
+
+  const restartGame = useCallback(() => {
+    setDeck(createShowCardsDeck());
+    setScores({ player1: 0, player2: 0 });
+    setIsGameOver(false);
+    setWinner(null);
+    setCurrentPlayer(1);
+  }, [createShowCardsDeck]);
+
+  useEffect(() => {
+    if (gameMode === "2-player") {
+      restartGame();
+    }
+  }, [gameMode, restartGame]);
+
   return (
     <GameContext.Provider
       value={{
@@ -109,6 +137,10 @@ export const GameProvider = ({ children }) => {
         calculateScore,
         updateScore,
         scores,
+        isGameOver,
+        winner,
+        checkEndGame,
+        restartGame,
       }}
     >
       {children}

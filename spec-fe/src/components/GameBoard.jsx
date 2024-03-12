@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import cardImages from "./images";
 import cardBackImage from "cardsJS/cards/Red_Back.svg"; // Assuming this is the path
 import { useGame } from "../context/useGame";
 import GuessModal from "./GuessModal";
+import WinnerAnnouncementModal from "./WinnerAnnouncementModal";
 
 const GameBoard = () => {
   const {
@@ -14,6 +15,10 @@ const GameBoard = () => {
     calculateScore,
     updateScore,
     scores,
+    checkEndGame,
+    restartGame,
+    isGameOver,
+    winner,
   } = useGame();
   const [isGuessModalOpen, setIsGuessModalOpen] = useState(false);
   const [currentGuessIndex, setCurrentGuessIndex] = useState(null);
@@ -80,6 +85,14 @@ const GameBoard = () => {
     });
   };
 
+  const handleRestart = () => {
+    restartGame();
+  };
+
+  useEffect(() => {
+    checkEndGame();
+  }, [deck, checkEndGame]);
+
   return (
     <>
       {feedback && <div className="feedback">{feedback}</div>}
@@ -98,6 +111,11 @@ const GameBoard = () => {
         isOpen={isGuessModalOpen}
         onClose={() => setIsGuessModalOpen(false)}
         onGuessSubmit={handleGuessSubmit}
+      />
+      <WinnerAnnouncementModal
+        isShown={isGameOver}
+        winner={winner}
+        onRestart={handleRestart}
       />
     </>
   );
