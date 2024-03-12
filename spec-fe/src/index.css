@@ -1,68 +1,136 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+.App {
+  text-align: center;
+  font-family: Arial, sans-serif;
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-size: 32px;
+  color: #333;
+  margin-bottom: 20px;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+.game-mode-selection button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+.game-mode-selection button:hover {
+  background-color: #e9e9e9;
+}
+
+.grid-container {
+  max-width: 600px; /* Fixed width */
+  margin: auto; /* Center the grid horizontally */
+  overflow: auto; /* Add scrollbars if content overflows */
+  padding: 20px; /* Some padding around the grid */
+  background-color: #f0f0f0; /* Optional: background color */
+  border-radius: 10px; /* Optional: rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: drop shadow for depth */
+}
+
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(
+    5,
+    1fr
+  ); /* Adjust based on your game's layout */
+  gap: 10px;
+}
+
+/* Continue with existing styles */
+
+.grid-item {
+  cursor: pointer;
+}
+
+.grid-item img {
+  width: 100%;
+  max-width: 100px; /* Adjust based on your layout */
+  height: auto;
+}
+
+.error {
+  border-color: red;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.8rem;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.error {
+  color: red;
+}
+
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.grid-item {
+  cursor: pointer;
+  transition: transform 0.2s; /* Smooth scaling on hover */
+}
+
+.grid-item:hover {
+  transform: scale(1.1);
+}
+
+.grid-item img {
+  width: 100%;
+  height: auto;
+}
+
+.scoreboard {
+  margin-bottom: 20px;
+}
+
+.player-score {
+  font-weight: normal;
+  color: #666;
+}
+
+.player-score.active {
+  font-weight: bold;
+  color: #000;
+}
+
+.feedback {
+  background-color: #f4f4f4;
+  border: 5px solid #000000;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+  .grid-container {
+    max-width: 90%; /* Use a percentage of the screen width on smaller screens */
+    max-height: 400px; /* Adjust height accordingly */
   }
 }
