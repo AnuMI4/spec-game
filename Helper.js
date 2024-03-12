@@ -74,7 +74,7 @@ export default class Helper {
         console.log(`\n\n\n\n${reset}${outerPadding}${reset}`);
         // Ensuring message is centered by adjusting padding around the message
         console.log(`${reset}${padding}${background}${message}${reset}${padding}`);
-        console.log(`${reset}${outerPadding}${reset}\n\n\n\n`);
+        console.log(`${reset}${outerPadding}${reset}`);
     }
 
     static storeLastGuess(cardIdentifier){
