@@ -9,6 +9,90 @@ h1 {
   margin-bottom: 20px;
 }
 
+/* Navbar Styling */
+nav {
+  background-color: #000; /* Black background */
+  color: #fff; /* White text */
+  padding: 10px 20px;
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+nav ul li {
+  margin-right: 20px;
+}
+
+nav ul li:last-child {
+  margin-right: 0;
+}
+
+nav ul li a {
+  color: #fff; /* White text links */
+  text-decoration: none;
+  padding: 5px 10px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+nav ul li a:hover,
+nav ul li a:focus {
+  background-color: #fff; /* White background on hover/focus */
+  color: #000; /* Black text on hover/focus */
+  border-radius: 5px;
+}
+
+/* Modal Styling */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black backdrop */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+}
+
+.modal-content {
+  background-color: #fff; /* White background for the modal content */
+  color: #000; /* Black text for readability */
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 90%;
+  z-index: 1055;
+}
+
+.modal-content h2,
+.modal-content p {
+  margin-bottom: 20px;
+}
+
+.modal-content button {
+  background-color: #000; /* Black background for buttons */
+  color: #fff; /* White text */
+  border: 1px solid #000; /* Solid black border */
+  padding: 8px 15px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  margin-right: 10px;
+  border-radius: 3px;
+}
+
+.modal-content button:hover {
+  background-color: #fff; /* Invert colors on hover */
+  color: #000;
+  border: 1px solid #000;
+}
+
 .game-mode-selection button {
   margin: 10px;
   padding: 10px 20px;

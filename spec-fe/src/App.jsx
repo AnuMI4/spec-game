@@ -1,21 +1,13 @@
 import { GameProvider } from "./context/GameContext";
-import { HashRouter as Router, Route, Routes } from "react-router-dom";
-import GameBoard from "./components/GameBoard";
-import GameModeSelection from "./components/GameModeSelection";
-import LastGuessInput from "./components/LastGuessInput";
+import { HashRouter as Router } from "react-router-dom";
+import Layout from "./components/Layout";
 
 function App() {
   return (
     <GameProvider>
       <Router>
         <div className="App">
-          <h1>Welcome to the Game</h1>
-
-          <Routes>
-            <Route path="/" element={<GameModeSelection />} />
-            <Route path="/last-guess" element={<LastGuessInput />} />
-            <Route path="/game-board" element={<GameBoard />} />
-          </Routes>
+          <Layout />
         </div>
       </Router>
     </GameProvider>
