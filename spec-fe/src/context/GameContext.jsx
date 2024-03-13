@@ -10,14 +10,14 @@ import { patternGuess } from "../utils";
 export const GameContext = createContext();
 
 export const GameProvider = ({ children }) => {
-  const [gameMode, setGameMode] = useState("");
   const [currentPlayer, setCurrentPlayer] = useState(1);
   const [deck, setDeck] = useState([]);
   const [lastGuesses, setLastGuesses] = useState({});
   const [gameStarted, setGameStarted] = useState(false);
-  const [scores, setScores] = useState({ player1: 0, player2: 0 });
+  const [scores, setScores] = useState({}); // Empty object to dynamically add player scores
   const [isGameOver, setIsGameOver] = useState(false);
   const [winner, setWinner] = useState(null);
+  const [totalPlayers, setTotalPlayers] = useState(0);
 
   // Simulated card creation logic based on your Card.js
   const suits = useMemo(() => ["Hearts", "Diamonds", "Clubs", "Spades"], []);
@@ -25,6 +25,14 @@ export const GameProvider = ({ children }) => {
     () => ["2", "Ten", "Jack", "Queen", "King", "Ace"],
     []
   );
+
+  useEffect(() => {
+    const initialScores = {};
+    for (let i = 1; i <= totalPlayers; i++) {
+      initialScores[`player${i}`] = 0; // Initialize scores for each player
+    }
+    setScores(initialScores);
+  }, [totalPlayers]);
 
   const saveLastGuesses = (guesses) => {
     setLastGuesses(guesses);
@@ -84,14 +92,13 @@ export const GameProvider = ({ children }) => {
   }, [suits, specialValues, shuffleDeck]);
 
   useEffect(() => {
-    if (gameMode === "2-player") {
+    if (totalPlayers !== 0) {
       setDeck(createShowCardsDeck());
     }
-    // Reset or initialize the deck for other game modes as needed
-  }, [gameMode, createShowCardsDeck]);
+  }, [totalPlayers, createShowCardsDeck]);
 
   const switchPlayer = () => {
-    setCurrentPlayer((prevPlayer) => (prevPlayer === 1 ? 2 : 1));
+    setCurrentPlayer((prevPlayer) => (prevPlayer % totalPlayers) + 1);
   };
 
   const checkEndGame = () => {
@@ -107,24 +114,26 @@ export const GameProvider = ({ children }) => {
   };
 
   const restartGame = useCallback(() => {
-    setDeck(createShowCardsDeck());
-    setScores({ player1: 0, player2: 0 });
-    setIsGameOver(false);
-    setWinner(null);
-    setCurrentPlayer(1);
-  }, [createShowCardsDeck]);
+    setDeck(createShowCardsDeck()); // Initialize the deck
+    setGameStarted(false); // Reset game start flag
+    setIsGameOver(false); // Reset game over flag
+    setWinner(null); // Clear winner
+    setCurrentPlayer(1); // Start with player 1
 
-  useEffect(() => {
-    if (gameMode === "2-player") {
-      restartGame();
+    // Initialize scores for the current number of players
+    const initialScores = {};
+    for (let i = 1; i <= totalPlayers; i++) {
+      initialScores[`player${i}`] = 0;
     }
-  }, [gameMode, restartGame]);
+    setScores(initialScores);
+
+    // Optionally reset lastGuesses if necessary
+    setLastGuesses({});
+  }, [createShowCardsDeck, totalPlayers]);
 
   return (
     <GameContext.Provider
       value={{
-        gameMode,
-        chooseGameMode: setGameMode,
         lastGuesses,
         saveLastGuesses,
         gameStarted,
@@ -141,6 +150,8 @@ export const GameProvider = ({ children }) => {
         winner,
         checkEndGame,
         restartGame,
+        totalPlayers,
+        setTotalPlayers,
       }}
     >
       {children}

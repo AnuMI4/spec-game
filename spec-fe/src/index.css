@@ -126,8 +126,6 @@ nav ul li a:focus {
   gap: 10px;
 }
 
-/* Continue with existing styles */
-
 .grid-item {
   cursor: pointer;
 }
@@ -190,8 +188,34 @@ nav ul li a:focus {
   height: auto;
 }
 
+/* Score Display Styling */
 .scoreboard {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px; /* Adjust based on preference */
   margin-bottom: 20px;
+}
+
+.scoreboard p {
+  background-color: #f0f0f0; /* Light grey background for each score */
+  color: #333; /* Dark text color for contrast */
+  padding: 10px 20px;
+  border-radius: 8px; /* Soften the edges */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  font-weight: bold; /* Make the text stand out */
+}
+
+.scoreboard p:before {
+  content: "Player ";
+}
+
+/* Optional: Responsive adjustments */
+@media (max-width: 600px) {
+  .scoreboard {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .player-score {

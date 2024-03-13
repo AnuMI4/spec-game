@@ -19,6 +19,7 @@ const GameBoard = () => {
     restartGame,
     isGameOver,
     winner,
+    totalPlayers,
   } = useGame();
   const [isGuessModalOpen, setIsGuessModalOpen] = useState(false);
   const [currentGuessIndex, setCurrentGuessIndex] = useState(null);
@@ -46,7 +47,7 @@ const GameBoard = () => {
 
     revealCard(currentGuessIndex); // Always reveal the card after a guess
 
-    const nextPlayer = currentPlayer === 1 ? 2 : 1; // Assuming 2 players for simplicity
+    const nextPlayer = (currentPlayer % totalPlayers) + 1;
     if (score > 0) {
       updateScore(currentPlayer, score); // Add score to the current player
       setFeedback(
@@ -97,12 +98,11 @@ const GameBoard = () => {
     <>
       {feedback && <div className="feedback">{feedback}</div>}
       <div className="scoreboard">
-        <p className={`player-score ${currentPlayer === 1 ? "active" : ""}`}>
-          Player 1 Score: {scores.player1}
-        </p>
-        <p className={`player-score ${currentPlayer === 2 ? "active" : ""}`}>
-          Player 2 Score: {scores.player2}
-        </p>
+        {Object.entries(scores).map(([playerId, score]) => (
+          <p key={playerId}>
+            {playerId} Score: {score}
+          </p>
+        ))}
       </div>
       <div className="grid-container">
         <div className="game-board">{renderGridItems()}</div>
