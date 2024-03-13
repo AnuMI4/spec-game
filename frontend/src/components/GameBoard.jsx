@@ -4,6 +4,7 @@ import { useGame } from "@/context/useGame";
 import cardImages from "@/components/images";
 import GuessModal from "@/components/GuessModal";
 import WinnerAnnouncementModal from "@/components/WinnerAnnouncementModal";
+import { validateGuessFormat } from "@/utils";
 
 const GameBoard = () => {
   const {
@@ -11,7 +12,6 @@ const GameBoard = () => {
     revealCard,
     switchPlayer,
     currentPlayer,
-    validateGuessFormat,
     calculateScore,
     updateScore,
     scores,
