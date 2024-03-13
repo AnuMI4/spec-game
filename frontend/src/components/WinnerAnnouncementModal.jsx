@@ -1,4 +1,4 @@
-import { useGame } from "../context/useGame";
+import { useGame } from "@/context/useGame";
 
 const WinnerAnnouncementModal = () => {
   const { isGameOver, winner, restartGame } = useGame();

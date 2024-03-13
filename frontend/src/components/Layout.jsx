@@ -1,8 +1,8 @@
 import { Routes, Route, useLocation } from "react-router-dom";
-import Navbar from "./Navbar";
-import GameModeSelection from "./GameModeSelection";
-import LastGuessInput from "./LastGuessInput";
-import GameBoard from "./GameBoard";
+import Navbar from "@/components/Navbar";
+import GameModeSelection from "@/components/GameModeSelection";
+import LastGuessInput from "@/components/LastGuessInput";
+import GameBoard from "@/components/GameBoard";
 
 const Layout = () => {
   const location = useLocation();

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { patternGuess } from "../utils";
-import { useGame } from "../context/useGame";
+import { useGame } from "@/context/useGame";
+import { patternGuess } from "@/utils";
 
 const LastGuessInput = () => {
   const { totalPlayers, saveLastGuesses } = useGame();

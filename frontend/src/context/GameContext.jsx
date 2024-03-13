@@ -5,7 +5,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { patternGuess } from "../utils";
+import { patternGuess } from "@/utils";
 
 export const GameContext = createContext();
 

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useGame } from "../context/useGame";
+import { useGame } from "@/context/useGame";
 
 const GameModeSelection = () => {
   const { setTotalPlayers } = useGame();

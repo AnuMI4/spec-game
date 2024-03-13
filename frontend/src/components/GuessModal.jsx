@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { patternGuess } from "../utils";
+import { patternGuess } from "@/utils";
 
 const GuessModal = ({ isOpen, onClose, onGuessSubmit }) => {
   const [guess, setGuess] = useState("");

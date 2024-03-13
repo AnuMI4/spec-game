@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import cardImages from "./images";
-import cardBackImage from "cardsJS/cards/Red_Back.svg"; // Assuming this is the path
-import { useGame } from "../context/useGame";
-import GuessModal from "./GuessModal";
-import WinnerAnnouncementModal from "./WinnerAnnouncementModal";
+import cardBackImage from "cardsJS/cards/Red_Back.svg";
+import { useGame } from "@/context/useGame";
+import cardImages from "@/components/images";
+import GuessModal from "@/components/GuessModal";
+import WinnerAnnouncementModal from "@/components/WinnerAnnouncementModal";
 
 const GameBoard = () => {
   const {
