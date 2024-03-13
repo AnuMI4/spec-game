@@ -33,9 +33,11 @@ export const GameProvider = ({ children }) => {
     const suitMatch = guess.slice(-1) === card.suit.charAt(0);
     const rankMatch = guess.slice(0, -1).toUpperCase() === card.value.charAt(0);
 
-    if (exactMatch) score += 3;
-    else if (suitMatch && rankMatch) score += 2;
-    else if (suitMatch || rankMatch) score += 1;
+    if (exactMatch) score += 4;
+    else if (!suitMatch && rankMatch && card.value !== 'Joker') score += 2;
+    else if (suitMatch && !rankMatch && card.value !== 'Joker') score += 1;
+    else if (card.value.charAt(0) === '2' && guess === 'JR') score += 2;
+    else if (`${card.value.charAt(0)}${card.suit.charAt(0)}` === 'JN' && guess === 'JR') score += 4;
 
     return score;
   };

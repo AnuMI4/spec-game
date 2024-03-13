@@ -30,7 +30,7 @@ const GuessModal = ({ isOpen, onClose, onGuessSubmit }) => {
             type="text"
             value={guess}
             onChange={(e) => setGuess(e.target.value)}
-            placeholder="e.g., AS, JD, 2H"
+            placeholder="e.g., AS, JD, QH"
           />
           {error && <p className="error">{error}</p>}
           <button type="submit">Submit</button>
