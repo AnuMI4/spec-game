@@ -15,6 +15,7 @@ export const GameProvider = ({ children }) => {
   const [scores, setScores] = useState({});
   const [isGameOver, setIsGameOver] = useState(false);
   const [winner, setWinner] = useState(null);
+  const [currentRound, setCurrentRound] = useState(1);
 
   // Helper function for updating scores
   const updateScore = (player, score) => {
@@ -34,10 +35,14 @@ export const GameProvider = ({ children }) => {
     const rankMatch = guess.slice(0, -1).toUpperCase() === card.value.charAt(0);
 
     if (exactMatch) score += 4;
-    else if (!suitMatch && rankMatch && card.value !== 'Joker') score += 2;
-    else if (suitMatch && !rankMatch && card.value !== 'Joker') score += 1;
-    else if (card.value.charAt(0) === '2' && guess === 'JR') score += 2;
-    else if (`${card.value.charAt(0)}${card.suit.charAt(0)}` === 'JN' && guess === 'JR') score += 4;
+    else if (!suitMatch && rankMatch && card.value !== "Joker") score += 2;
+    else if (suitMatch && !rankMatch && card.value !== "Joker") score += 1;
+    else if (card.value.charAt(0) === "2" && guess === "JR") score += 2;
+    else if (
+      `${card.value.charAt(0)}${card.suit.charAt(0)}` === "JN" &&
+      guess === "JR"
+    )
+      score += 4;
 
     return score;
   };
@@ -87,8 +92,21 @@ export const GameProvider = ({ children }) => {
         (key) => scores[key] === winningScore
       );
       setWinner(winner);
+
+      prepareNextRound();
     }
   };
+
+  const prepareNextRound = useCallback(() => {
+    // Increment the round
+    setCurrentRound(currentRound + 1);
+
+    // Reset necessary states for a new round
+    setDeck(createShowCardsDeck()); // Re-initialize the deck
+    setLastGuesses({});
+    setIsGameOver(false); // Reset game over state
+    setWinner(null);
+  }, [currentRound]);
 
   // Function to save the last guesses and start the game
   const saveLastGuesses = (guesses) => {
@@ -132,6 +150,8 @@ export const GameProvider = ({ children }) => {
         restartGame,
         totalPlayers,
         setTotalPlayers,
+        currentRound,
+        prepareNextRound,
       }}
     >
       {children}

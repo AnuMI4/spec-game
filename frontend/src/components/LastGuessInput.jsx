@@ -32,7 +32,10 @@ const LastGuessInput = () => {
     const allValid =
       Object.values(errors).every((error) => !error) &&
       Object.values(playerGuesses).every((guess) => patternGuess.test(guess)) &&
-      Object.values(playerGuesses).every((element, index) => Object.values(playerGuesses).indexOf(element) === index);
+      Object.values(playerGuesses).every(
+        (element, index) =>
+          Object.values(playerGuesses).indexOf(element) === index
+      );
 
     if (allValid) {
       saveLastGuesses(playerGuesses);
@@ -46,7 +49,9 @@ const LastGuessInput = () => {
     <form onSubmit={handleSubmit}>
       {Object.entries(playerGuesses).map(([player, guess], index) => (
         <div key={player}>
-          <label htmlFor={`guess-${index}`}>Player {index + 1} Prediction:</label>
+          <label htmlFor={`guess-${index}`}>
+            Player {index + 1} Prediction:
+          </label>
           <input
             id={`guess-${index}`}
             type="text"
