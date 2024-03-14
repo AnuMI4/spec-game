@@ -1,7 +1,14 @@
 import { useGame } from "@/context/useGame";
 
 const WinnerAnnouncementModal = () => {
-  const { isGameOver, winner, restartGame, prepareNextRound } = useGame();
+  const {
+    isGameOver,
+    winner,
+    restartGame,
+    prepareNextRound,
+    currentRound,
+    totalPlayers,
+  } = useGame();
 
   if (!isGameOver) return null;
 
@@ -10,7 +17,10 @@ const WinnerAnnouncementModal = () => {
       <div className="modal-content">
         <h2>Game Over</h2>
         <p>Congratulations, Player {winner}! You&apos;ve won the game!</p>
-        <button onClick={prepareNextRound}>Start Next Round</button>
+
+        {currentRound !== totalPlayers && (
+          <button onClick={prepareNextRound}>Start Next Round</button>
+        )}
         <button onClick={restartGame}>Restart Game</button>
       </div>
     </div>
