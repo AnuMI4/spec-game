@@ -29,13 +29,22 @@ const LastGuessInput = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const suits = Object.values(playerGuesses).map(guess => guess[0]);
+    const values = Object.values(playerGuesses).map(guess => guess[1]);
+  
+    // Function to check if there are duplicates in an array
+    const hasDuplicates = (array) => new Set(array).size !== array.length;
+
     const allValid =
       Object.values(errors).every((error) => !error) &&
       Object.values(playerGuesses).every((guess) => patternGuess.test(guess)) &&
       Object.values(playerGuesses).every(
         (element, index) =>
           Object.values(playerGuesses).indexOf(element) === index
-      );
+      ) &&
+      !hasDuplicates(suits) && 
+      !hasDuplicates(values);
 
     if (allValid) {
       saveLastGuesses(playerGuesses);

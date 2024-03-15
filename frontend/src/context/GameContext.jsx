@@ -53,7 +53,7 @@ export const GameProvider = ({ children }) => {
     const rankMatch = guess.slice(0, -1).toUpperCase() === card.value.charAt(0);
 
     if (exactMatch) score += 4;
-    else if (!suitMatch && rankMatch && card.value !== "Joker") score += 2;
+    else if (!suitMatch && rankMatch && card.value !== "Joker" && guess !== "JR") score += 2;
     else if (suitMatch && !rankMatch && card.value !== "Joker") score += 1;
     else if (card.value.charAt(0) === "2" && guess === "JR") score += 2;
     else if (
