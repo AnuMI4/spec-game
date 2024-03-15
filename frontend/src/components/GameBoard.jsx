@@ -26,6 +26,7 @@ const GameBoard = () => {
   const [currentGuessIndex, setCurrentGuessIndex] = useState(null);
   const [clickedCards, setClickedCards] = useState([]);
   const [feedback, setFeedback] = useState("");
+  const [lastGuessedCard, setLastGuessedCard] = useState(null);
 
   const handleCardClick = (index) => {
     if (deck[index].revealed) return; // Prevent action on revealed cards
@@ -42,6 +43,7 @@ const GameBoard = () => {
       switchPlayer(); // Move to the next player
       return;
     }
+    setLastGuessedCard(guess);
 
     const card = deck[currentGuessIndex];
     const score = calculateScore(guess, card);
@@ -141,6 +143,7 @@ const GameBoard = () => {
         isOpen={isGuessModalOpen}
         onClose={() => setIsGuessModalOpen(false)}
         onGuessSubmit={handleGuessSubmit}
+        lastGuessedCard={lastGuessedCard}
       />
       <WinnerAnnouncementModal
         isShown={isGameOver}

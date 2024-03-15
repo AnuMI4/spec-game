@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { patternGuess } from "@/utils";
 
-const GuessModal = ({ isOpen, onClose, onGuessSubmit }) => {
+const GuessModal = ({ isOpen, onClose, onGuessSubmit, lastGuessedCard }) => {
   const [guess, setGuess] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (patternGuess.test(guess)) {
+    if (patternGuess.test(guess) && guess.toUpperCase() !== lastGuessedCard) {
       onGuessSubmit(guess.toUpperCase());
       setGuess("");
       setError("");
