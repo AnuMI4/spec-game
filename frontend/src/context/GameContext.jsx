@@ -28,10 +28,20 @@ export const GameProvider = ({ children }) => {
     }));
 
     if(scoreCards.length === 0) return;
-    setPlayerScoreCards((prevScoreCards) => ({
-      ...prevScoreCards,
-      [key]: prevScoreCards[key].push(scoreCards.pop(score)),
-    }));
+    setPlayerScoreCards((prevScoreCards) => {
+      // Determine the start index for slicing the last n items
+      const startIndex = Math.max(0, scoreCards.length - score);
+      // Get the last n items from scoreCards
+      const itemsToAdd = scoreCards.slice(startIndex);
+    
+      return {
+        ...prevScoreCards,
+        [key]: [...prevScoreCards[key], ...itemsToAdd], // Add the items to the player's array
+      };
+    });
+    
+    // Update the scoreCards state to remove the last n items
+    setScoreCards((prevCards) => prevCards.slice(0, prevCards.length - score));
   };
 
   // Helper function for calculating score based on guess and card
