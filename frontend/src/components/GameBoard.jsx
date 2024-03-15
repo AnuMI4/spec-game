@@ -20,6 +20,7 @@ const GameBoard = () => {
     isGameOver,
     winner,
     totalPlayers,
+    scoreCards
   } = useGame();
   const [isGuessModalOpen, setIsGuessModalOpen] = useState(false);
   const [currentGuessIndex, setCurrentGuessIndex] = useState(null);
@@ -64,6 +65,34 @@ const GameBoard = () => {
     }
   };
 
+  const renderScoreCards = () => {
+    if (!scoreCards.length) return <div>Loading...</div>;
+    
+    return (
+      <div className="score-cards-container">
+        {scoreCards.map((card, index) => {
+          const cardKey = `card_${card.value.charAt(0)}${card.suit.charAt(0)}`;
+          const cardImage = cardBackImage;
+          const style = {
+            left: `${index * 5}px`, // This offsets each card horizontally. Adjust as necessary.
+            zIndex: index, // Ensures that cards overlap correctly.
+          };
+  
+          return (
+            <img
+              key={index}
+              className="score-card"
+              src={cardImage}
+              alt={`Card ${card.value} of ${card.suit}`}
+              style={style}
+            />
+          );
+        })}
+        <div className="score-cards-count">Score Cards: {scoreCards.length}</div>
+      </div>
+    );
+  };
+
   const renderGridItems = () => {
     if (!deck.length) return <div>Loading...</div>;
     console.log("deck:", deck);
@@ -106,6 +135,7 @@ const GameBoard = () => {
       </div>
       <div className="grid-container">
         <div className="game-board">{renderGridItems()}</div>
+        <div className="score-cards-container">{renderScoreCards()}</div>
       </div>
       <GuessModal
         isOpen={isGuessModalOpen}

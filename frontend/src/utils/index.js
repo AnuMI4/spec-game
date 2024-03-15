@@ -27,3 +27,20 @@ export const createShowCardsDeck = () => {
   });
   return shuffleDeck(deck);
 };
+
+// Function to create a deck of scorecards
+export const createScorecardsDeck = () => {
+  let scoreDeck = [];
+  // Add numerals from Three to Nine for each suit
+  ["3", "4", "5", "6", "7", "8", "9"].forEach(value => {
+      suits.forEach(suit => {
+        scoreDeck.push({ suit, value });
+      });
+  });
+  // Add two Jokers at the top
+  scoreDeck.push({ suit: "None", value: "Joker" });
+  scoreDeck.push({ suit: "None", value: "Joker" });
+
+  // The deck is arranged with Threes at the bottom and Jokers at the top
+  return scoreDeck;
+}

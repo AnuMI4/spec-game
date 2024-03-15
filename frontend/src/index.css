@@ -242,3 +242,58 @@ nav ul li a:focus {
     max-height: 400px; /* Adjust height accordingly */
   }
 }
+
+/* Add this to your CSS file */
+.score-cards-container {
+  position: relative;
+  height: 120px; /* Adjust based on your card height */
+  width: 140px;  /* Adjust based on your card width */
+}
+
+.score-card {
+  width: 100%;
+  max-width: 80px; /* Adjust based on your layout */
+  height: auto;
+  position: absolute;
+  bottom: 0;
+  transform-origin: bottom left;
+  transition: transform 0.3s ease;
+}
+
+.score-card:hover {
+  z-index: 10;
+  transform: translateY(-20px) scale(1.1); /* Adjust scaling and translation as needed */
+}
+/* 
+.grid-container {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  gap: 20px; 
+  flex-wrap: wrap;
+}
+*/
+
+
+.game-board {
+  /* Ensure the game board is flex-item that can grow and shrink */
+  flex: 1;
+  min-width: 60%; /* Minimum width of the game board, adjust as needed */
+}
+
+.score-cards-container {
+  /* Adjust the score cards container styling as needed */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the cards vertically */
+  justify-content: start;
+  gap: 10px; /* Space between each card if stacked vertically */
+  flex-shrink: 0; /* Prevent the score cards container from shrinking */
+  min-width: 80px; /* Minimum width of the score cards container, adjust as needed */
+}
+
+.score-cards-count {
+  margin-top: -10px; /* Add some space above the count */
+  font-size: 16px; /* Adjust the font size as needed */
+  font-weight: bold; /* Make the count stand out */
+}

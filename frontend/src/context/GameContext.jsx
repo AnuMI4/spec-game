@@ -1,5 +1,5 @@
 import { createContext, useCallback, useEffect, useState } from "react";
-import { createShowCardsDeck } from "@/utils";
+import { createScorecardsDeck, createShowCardsDeck } from "@/utils";
 
 export const GameContext = createContext();
 
@@ -7,12 +7,14 @@ export const GameProvider = ({ children }) => {
   // States related to the game setup
   const [currentPlayer, setCurrentPlayer] = useState(1);
   const [deck, setDeck] = useState([]);
+  const [scoreCards, setScoreCards] = useState([]);
   const [gameStarted, setGameStarted] = useState(false);
   const [totalPlayers, setTotalPlayers] = useState(0);
 
   // States related to game progress and outcome
   const [lastGuesses, setLastGuesses] = useState({});
   const [scores, setScores] = useState({});
+  const [playerScoreCards, setPlayerScoreCards] = useState({});
   const [isGameOver, setIsGameOver] = useState(false);
   const [winner, setWinner] = useState(null);
   const [currentRound, setCurrentRound] = useState(1);
@@ -23,6 +25,12 @@ export const GameProvider = ({ children }) => {
     setScores((prevScores) => ({
       ...prevScores,
       [key]: prevScores[key] + score,
+    }));
+
+    if(scoreCards.length === 0) return;
+    setPlayerScoreCards((prevScoreCards) => ({
+      ...prevScoreCards,
+      [key]: prevScoreCards[key].push(scoreCards.pop(score)),
     }));
   };
 
@@ -56,6 +64,14 @@ export const GameProvider = ({ children }) => {
     return initialScores;
   };
 
+  const initializeScoreCards = (totalPlayers) => {
+    const initialScores = {};
+    for (let i = 1; i <= totalPlayers; i++) {
+      initialScores[`player${i}`] = [];
+    }
+    return initialScores;
+  };
+
   // Callback function for revealing a card
   const revealCard = useCallback(
     (index) => {
@@ -69,11 +85,13 @@ export const GameProvider = ({ children }) => {
   // Callback function for restarting the game
   const restartGame = useCallback(() => {
     setDeck(createShowCardsDeck());
+    setScoreCards(createScorecardsDeck());
     setGameStarted(false);
     setIsGameOver(false);
     setWinner(null);
     setCurrentPlayer(1);
     setScores(initializeScores(totalPlayers));
+    setPlayerScoreCards(initializeScoreCards(totalPlayers));
     setLastGuesses({});
   }, [totalPlayers]);
 
@@ -103,6 +121,7 @@ export const GameProvider = ({ children }) => {
 
     // Reset necessary states for a new round
     setDeck(createShowCardsDeck()); // Re-initialize the deck
+    setScoreCards(createScorecardsDeck());
     setLastGuesses({});
     setIsGameOver(false); // Reset game over state
     setWinner(null);
@@ -117,16 +136,20 @@ export const GameProvider = ({ children }) => {
   // Effect hook for initializing scores when totalPlayers changes
   useEffect(() => {
     const initialScores = {};
+    const initialScoreCards = {};
     for (let i = 1; i <= totalPlayers; i++) {
       initialScores[`player${i}`] = 0;
+      initialScoreCards[`player${i}`] = [];
     }
     setScores(initialScores);
+    setPlayerScoreCards(initialScoreCards);
   }, [totalPlayers]);
 
   // Effect hook for creating the deck when totalPlayers changes
   useEffect(() => {
     if (totalPlayers !== 0) {
       setDeck(createShowCardsDeck());
+      setScoreCards(createScorecardsDeck());
     }
   }, [totalPlayers]);
 
@@ -152,6 +175,7 @@ export const GameProvider = ({ children }) => {
         setTotalPlayers,
         currentRound,
         prepareNextRound,
+        scoreCards
       }}
     >
       {children}
