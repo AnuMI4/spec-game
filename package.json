@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "test": "npx cypress run --headed --browser chrome --spec cypress/e2e/test-gameplay.cy.js"
+  },
+  "devDependencies": {
+    "cypress": "^13.7.0"
+  }
+}
+
