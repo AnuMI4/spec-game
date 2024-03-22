@@ -8,7 +8,6 @@ export const GameProvider = ({ children }) => {
   const [currentPlayer, setCurrentPlayer] = useState(1);
   const [deck, setDeck] = useState([]);
   const [scoreCards, setScoreCards] = useState([]);
-  const [gameStarted, setGameStarted] = useState(false);
   const [totalPlayers, setTotalPlayers] = useState(2);
 
   // States related to game progress and outcome
@@ -18,6 +17,9 @@ export const GameProvider = ({ children }) => {
   const [isGameOver, setIsGameOver] = useState(false);
   const [winner, setWinner] = useState(null);
   const [currentRound, setCurrentRound] = useState(1);
+
+  const [lastGuessedCards, setLastGuessedCards] = useState(null);
+  const [lastDeckCard, setLastDeckCard] = useState(null);
 
   // Helper function for updating scores
   const updateScore = (player, score) => {
@@ -94,6 +96,11 @@ export const GameProvider = ({ children }) => {
       const newDeck = [...deck];
       newDeck[index].revealed = true;
       setDeck(newDeck);
+
+      const unrevealedCards = newDeck.filter((card) => !card.revealed);
+      if (unrevealedCards.length === 0) {
+        setLastDeckCard(newDeck[index]);
+      }
     },
     [deck]
   );
@@ -102,7 +109,6 @@ export const GameProvider = ({ children }) => {
   const restartGame = useCallback(() => {
     setDeck(createShowCardsDeck());
     setScoreCards(createScorecardsDeck());
-    setGameStarted(false);
     setIsGameOver(false);
     setWinner(null);
     setCurrentPlayer(1);
@@ -110,15 +116,11 @@ export const GameProvider = ({ children }) => {
     setScores(initializeScores(totalPlayers));
     setPlayerScoreCards(initializeScoreCards(totalPlayers));
     setLastGuesses({});
+    setLastGuessedCards({});
   }, [totalPlayers]);
 
-  // // Function to switch to the next player
-  // const switchPlayer = () => {
-  //   setCurrentPlayer((prevPlayer) => (prevPlayer % totalPlayers) + 1);
-  // };
-
-  // Function to switch to the next player
-  const switchPlayer = () => {
+  // Function to calculate the winner of the round
+  const calculateWinner = () => {
     // Check if there's only one card left in the deck
     if (deck.every((card) => card.revealed)) {
       // Logic to determine and set the round's winner based on scores
@@ -132,9 +134,12 @@ export const GameProvider = ({ children }) => {
       // Prepare for the next round
       // prepareNextRound();
       setIsGameOver(true);
-    } else {
-      setCurrentPlayer((prevPlayer) => (prevPlayer % totalPlayers) + 1);
     }
+  };
+
+  // Function to switch to the next player
+  const switchPlayer = () => {
+    setCurrentPlayer((prevPlayer) => (prevPlayer % totalPlayers) + 1);
   };
 
   // Resets only necessary states for starting a new round
@@ -145,8 +150,9 @@ export const GameProvider = ({ children }) => {
       setDeck(createShowCardsDeck()); // Initialize the deck for the new round
       setScoreCards(createScorecardsDeck()); // Reset or initialize scoreCards for the new round if used
       setLastGuesses({}); // Clear last guesses to allow new input
-      setGameStarted(false); // Requires new setup (e.g., collecting last guesses) to start the round
+      setLastGuessedCards({}); // Clear last guessed cards to allow new input
       setIsGameOver(false); // Ensure game over state is reset
+      setCurrentPlayer(1); // Reset the current player to the first player
       // Note: Scores are maintained and not reset here
     } else {
       // Handling the end of the last round, potentially determining the overall winner
@@ -163,7 +169,6 @@ export const GameProvider = ({ children }) => {
   // Function to save the last guesses and start the game
   const saveLastGuesses = (guesses) => {
     setLastGuesses(guesses);
-    setGameStarted(true);
   };
 
   // Effect hook for initializing scores when totalPlayers changes
@@ -191,9 +196,8 @@ export const GameProvider = ({ children }) => {
       value={{
         lastGuesses,
         saveLastGuesses,
-        gameStarted,
-        setGameStarted,
         currentPlayer,
+        calculateWinner,
         switchPlayer,
         deck,
         revealCard,
@@ -208,6 +212,9 @@ export const GameProvider = ({ children }) => {
         currentRound,
         prepareNextRound,
         scoreCards,
+        lastGuessedCards,
+        setLastGuessedCards,
+        lastDeckCard,
       }}
     >
       {children}

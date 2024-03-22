@@ -32,10 +32,10 @@ export const createShowCardsDeck = () => {
 export const createScorecardsDeck = () => {
   let scoreDeck = [];
   // Add numerals from Three to Nine for each suit
-  ["3", "4", "5", "6", "7", "8", "9"].forEach(value => {
-      suits.forEach(suit => {
-        scoreDeck.push({ suit, value });
-      });
+  ["3", "4", "5", "6", "7", "8", "9"].forEach((value) => {
+    suits.forEach((suit) => {
+      scoreDeck.push({ suit, value });
+    });
   });
   // Add two Jokers at the top
   scoreDeck.push({ suit: "None", value: "Joker" });
@@ -43,4 +43,36 @@ export const createScorecardsDeck = () => {
 
   // The deck is arranged with Threes at the bottom and Jokers at the top
   return scoreDeck;
-}
+};
+
+export const convertGuessToCard = (guess) => {
+  // Define mappings from guess format to full names
+  const suitsMap = {
+    H: "Hearts",
+    D: "Diamonds",
+    C: "Clubs",
+    S: "Spades",
+  };
+  const valuesMap = {
+    T: "Ten",
+    J: "Jack",
+    Q: "Queen",
+    K: "King",
+    A: "Ace",
+  };
+
+  // Handle Jokers directly
+  if (guess.toUpperCase() === "JR") {
+    return { suit: "None", value: "Joker" };
+  }
+
+  // Extract parts of the guess
+  const valuePart = guess.slice(0, -1).toUpperCase(); // All except last character
+  const suitPart = guess.slice(-1).toUpperCase(); // Last character
+
+  // Convert to full names
+  const suit = suitsMap[suitPart];
+  const value = valuesMap[valuePart] || valuePart; // Numbers stay as they are
+
+  return { suit, value };
+};

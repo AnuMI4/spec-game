@@ -4,8 +4,9 @@ import { useGame } from "@/context/useGame";
 import cardImages from "@/components/images";
 import GuessModal from "@/components/modals/GuessModal";
 import WinnerAnnouncementModal from "@/components/modals/WinnerAnnouncementModal";
+import LastGuessInputModal from "@/components/modals/LastGuessInputModal";
+import RevealLastCardModal from "@/components/modals/RevealLastCardModal";
 import { validateGuessFormat } from "@/utils";
-import LastGuessInputModal from "./modals/LastGuessInputModal";
 
 const GameBoard = () => {
   const {
@@ -23,8 +24,11 @@ const GameBoard = () => {
     scoreCards,
     currentRound,
     lastGuesses,
+    calculateWinner,
+    lastGuessedCards,
   } = useGame();
 
+  console.log("lastGuessedCards: ", lastGuessedCards);
   console.log("deck:", deck);
 
   const [isGuessModalOpen, setIsGuessModalOpen] = useState(false);
@@ -33,12 +37,41 @@ const GameBoard = () => {
   const [feedback, setFeedback] = useState("");
   const [lastGuessedCard, setLastGuessedCard] = useState(null);
   const [isLastGuessModalOpen, setIsLastGuessModalOpen] = useState(false);
+  const [isRevealLastCardModalOpen, setIsRevealLastCardModalOpen] =
+    useState(false);
+  const [lastCard, setLastCard] = useState(null);
 
   const handleCardClick = (index) => {
     if (deck[index].revealed) return; // Prevent action on revealed cards
 
+    const unrevealedCards = deck.filter((card) => !card.revealed);
+
+    if (unrevealedCards.length === 1) {
+      setIsRevealLastCardModalOpen(true); // Show the modal to reveal the last card
+      return null; // Return null if the last card is the only card left to be revealed
+    }
+
     setIsGuessModalOpen(true);
     setCurrentGuessIndex(index);
+  };
+
+  const handleLastCardReveal = () => {
+    // Find the index of the last unrevealed card
+    const lastCardIndex = deck.findIndex((card) => !card.revealed);
+    const lastCard = deck[lastCardIndex];
+    setLastCard(lastCard);
+
+    if (lastCardIndex !== -1) {
+      revealCard(lastCardIndex); // Reveal the last card
+
+      setIsRevealLastCardModalOpen(false); // Close the modal
+
+      if (!clickedCards.includes(lastCardIndex)) {
+        setClickedCards([...clickedCards, lastCardIndex]);
+      }
+
+      calculateWinner();
+    }
   };
 
   const handleGuessSubmit = (guess) => {
@@ -68,6 +101,7 @@ const GameBoard = () => {
 
     console.log("switching player");
     switchPlayer(); // Move to the next player
+    calculateWinner();
 
     if (!clickedCards.includes(currentGuessIndex)) {
       setClickedCards([...clickedCards, currentGuessIndex]);
@@ -167,9 +201,15 @@ const GameBoard = () => {
         winner={winner}
         onRestart={handleRestart}
       />
-      {isLastGuessModalOpen && (
-        <LastGuessInputModal onClose={() => setIsLastGuessModalOpen(false)} />
-      )}
+      <LastGuessInputModal
+        isOpen={isLastGuessModalOpen}
+        onClose={() => setIsLastGuessModalOpen(false)}
+      />
+      <RevealLastCardModal
+        isOpen={isRevealLastCardModalOpen}
+        onClose={() => setIsRevealLastCardModalOpen(false)}
+        onReveal={handleLastCardReveal}
+      />
     </>
   );
 };

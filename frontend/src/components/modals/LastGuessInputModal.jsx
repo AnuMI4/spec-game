@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
 import { useGame } from "@/context/useGame";
-import { patternGuess } from "@/utils";
+import { convertGuessToCard, patternGuess } from "@/utils";
 
-const LastGuessInputModal = ({ onClose }) => {
-  const { totalPlayers, saveLastGuesses } = useGame();
+const LastGuessInputModal = ({ isOpen, onClose }) => {
+  const { totalPlayers, saveLastGuesses, setLastGuessedCards } = useGame();
   const [playerGuesses, setPlayerGuesses] = useState({});
   const [errors, setErrors] = useState({});
   // const navigate = useNavigate();
@@ -19,7 +18,7 @@ const LastGuessInputModal = ({ onClose }) => {
     }
     setPlayerGuesses(initialGuesses);
     setErrors(initialErrors);
-  }, [totalPlayers]);
+  }, [totalPlayers, isOpen]);
 
   const handleChange = (player, value) => {
     const isValid = patternGuess.test(value.toUpperCase());
@@ -48,12 +47,19 @@ const LastGuessInputModal = ({ onClose }) => {
 
     if (allValid) {
       saveLastGuesses(playerGuesses);
+      setLastGuessedCards(
+        Object.values(playerGuesses).map((guess) => convertGuessToCard(guess))
+      );
       onClose();
-      // navigate("/game-board");
+      setPlayerGuesses({});
     } else {
       alert("Please enter valid guesses for all players.");
     }
   };
+
+  if (!isOpen) return null;
+
+  console.log("playerGuesses: ", playerGuesses);
 
   return (
     <div className="modal-backdrop">
