@@ -1,4 +1,5 @@
 import { useGame } from "@/context/useGame";
+import { useMemo } from "react";
 
 const WinnerAnnouncementModal = () => {
   const {
@@ -10,18 +11,28 @@ const WinnerAnnouncementModal = () => {
     totalPlayers,
   } = useGame();
 
+  const isLastRound = useMemo(
+    () => currentRound === totalPlayers,
+    [currentRound, totalPlayers]
+  );
+
   if (!isGameOver) return null;
 
   return (
     <div className="modal-backdrop">
       <div className="modal-content">
-        <h2>Game Over</h2>
-        <p>Congratulations, Player {winner}! You&apos;ve won the game!</p>
+        <h2>{isLastRound ? "Game Over" : "Round Over"}</h2>
 
-        {currentRound !== totalPlayers && (
-          <button onClick={prepareNextRound}>Start Next Round</button>
+        <p>
+          Congratulations,{" "}
+          {winner ? `Player ${winner} You've won the game!` : "it's a tie!"}
+        </p>
+
+        {!isLastRound ? (
+          <button onClick={prepareNextRound}>Next Round</button>
+        ) : (
+          <button onClick={restartGame}>Restart Game</button>
         )}
-        <button onClick={restartGame}>Restart Game</button>
       </div>
     </div>
   );

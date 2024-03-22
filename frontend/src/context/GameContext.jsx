@@ -9,7 +9,7 @@ export const GameProvider = ({ children }) => {
   const [deck, setDeck] = useState([]);
   const [scoreCards, setScoreCards] = useState([]);
   const [gameStarted, setGameStarted] = useState(false);
-  const [totalPlayers, setTotalPlayers] = useState(0);
+  const [totalPlayers, setTotalPlayers] = useState(2);
 
   // States related to game progress and outcome
   const [lastGuesses, setLastGuesses] = useState({});
@@ -24,22 +24,22 @@ export const GameProvider = ({ children }) => {
     const key = `player${player}`;
     setScores((prevScores) => ({
       ...prevScores,
-      [key]: prevScores[key] + score,
+      [key]: (prevScores[key] || 0) + score,
     }));
 
-    if(scoreCards.length === 0) return;
+    if (scoreCards.length === 0) return;
     setPlayerScoreCards((prevScoreCards) => {
       // Determine the start index for slicing the last n items
       const startIndex = Math.max(0, scoreCards.length - score);
       // Get the last n items from scoreCards
       const itemsToAdd = scoreCards.slice(startIndex);
-    
+
       return {
         ...prevScoreCards,
         [key]: [...prevScoreCards[key], ...itemsToAdd], // Add the items to the player's array
       };
     });
-    
+
     // Update the scoreCards state to remove the last n items
     setScoreCards((prevCards) => prevCards.slice(0, prevCards.length - score));
   };
@@ -53,7 +53,13 @@ export const GameProvider = ({ children }) => {
     const rankMatch = guess.slice(0, -1).toUpperCase() === card.value.charAt(0);
 
     if (exactMatch) score += 4;
-    else if (!suitMatch && rankMatch && card.value !== "Joker" && guess !== "JR") score += 2;
+    else if (
+      !suitMatch &&
+      rankMatch &&
+      card.value !== "Joker" &&
+      guess !== "JR"
+    )
+      score += 2;
     else if (suitMatch && !rankMatch && card.value !== "Joker") score += 1;
     else if (card.value.charAt(0) === "2" && guess === "JR") score += 2;
     else if (
@@ -100,15 +106,59 @@ export const GameProvider = ({ children }) => {
     setIsGameOver(false);
     setWinner(null);
     setCurrentPlayer(1);
+    setCurrentRound(1);
     setScores(initializeScores(totalPlayers));
     setPlayerScoreCards(initializeScoreCards(totalPlayers));
     setLastGuesses({});
   }, [totalPlayers]);
 
+  // // Function to switch to the next player
+  // const switchPlayer = () => {
+  //   setCurrentPlayer((prevPlayer) => (prevPlayer % totalPlayers) + 1);
+  // };
+
   // Function to switch to the next player
   const switchPlayer = () => {
-    setCurrentPlayer((prevPlayer) => (prevPlayer % totalPlayers) + 1);
+    // Check if there's only one card left in the deck
+    if (deck.every((card) => card.revealed)) {
+      // Logic to determine and set the round's winner based on scores
+      const maxScore = Math.max(...Object.values(scores));
+      const winningPlayer = Object.keys(scores).find(
+        (key) => scores[key] === maxScore
+      );
+      console.log("winner", winningPlayer);
+      setWinner(winningPlayer);
+
+      // Prepare for the next round
+      // prepareNextRound();
+      setIsGameOver(true);
+    } else {
+      setCurrentPlayer((prevPlayer) => (prevPlayer % totalPlayers) + 1);
+    }
   };
+
+  // Resets only necessary states for starting a new round
+  const prepareNextRound = useCallback(() => {
+    // Check if there are more rounds to play
+    if (currentRound < totalPlayers) {
+      setCurrentRound(currentRound + 1); // Move to the next round
+      setDeck(createShowCardsDeck()); // Initialize the deck for the new round
+      setScoreCards(createScorecardsDeck()); // Reset or initialize scoreCards for the new round if used
+      setLastGuesses({}); // Clear last guesses to allow new input
+      setGameStarted(false); // Requires new setup (e.g., collecting last guesses) to start the round
+      setIsGameOver(false); // Ensure game over state is reset
+      // Note: Scores are maintained and not reset here
+    } else {
+      // Handling the end of the last round, potentially determining the overall winner
+      setIsGameOver(true);
+      // Logic to determine and set the game's overall winner based on scores
+      const maxScore = Math.max(...Object.values(scores));
+      const winningPlayer = Object.keys(scores).find(
+        (key) => scores[key] === maxScore
+      );
+      setWinner(winningPlayer);
+    }
+  }, [currentRound, totalPlayers, scores]);
 
   // Function to check if the game has ended
   const checkEndGame = () => {
@@ -125,18 +175,6 @@ export const GameProvider = ({ children }) => {
     }
   };
 
-  const prepareNextRound = useCallback(() => {
-    // Increment the round
-    setCurrentRound(currentRound + 1);
-
-    // Reset necessary states for a new round
-    setDeck(createShowCardsDeck()); // Re-initialize the deck
-    setScoreCards(createScorecardsDeck());
-    setLastGuesses({});
-    setIsGameOver(false); // Reset game over state
-    setWinner(null);
-  }, [currentRound]);
-
   // Function to save the last guesses and start the game
   const saveLastGuesses = (guesses) => {
     setLastGuesses(guesses);
@@ -145,13 +183,13 @@ export const GameProvider = ({ children }) => {
 
   // Effect hook for initializing scores when totalPlayers changes
   useEffect(() => {
-    const initialScores = {};
+    // const initialScores = {};
     const initialScoreCards = {};
     for (let i = 1; i <= totalPlayers; i++) {
-      initialScores[`player${i}`] = 0;
+      // initialScores[`player${i}`] = 0;
       initialScoreCards[`player${i}`] = [];
     }
-    setScores(initialScores);
+    // setScores(initialScores);
     setPlayerScoreCards(initialScoreCards);
   }, [totalPlayers]);
 
@@ -185,7 +223,7 @@ export const GameProvider = ({ children }) => {
         setTotalPlayers,
         currentRound,
         prepareNextRound,
-        scoreCards
+        scoreCards,
       }}
     >
       {children}

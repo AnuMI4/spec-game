@@ -20,8 +20,12 @@ const GameBoard = () => {
     isGameOver,
     winner,
     totalPlayers,
-    scoreCards
+    scoreCards,
+    currentRound,
   } = useGame();
+
+  console.log("deck:", deck);
+
   const [isGuessModalOpen, setIsGuessModalOpen] = useState(false);
   const [currentGuessIndex, setCurrentGuessIndex] = useState(null);
   const [clickedCards, setClickedCards] = useState([]);
@@ -60,6 +64,7 @@ const GameBoard = () => {
       setFeedback(`Incorrect guess. Now it's Player ${nextPlayer}'s turn.`);
     }
 
+    console.log("switching player");
     switchPlayer(); // Move to the next player
 
     if (!clickedCards.includes(currentGuessIndex)) {
@@ -69,7 +74,7 @@ const GameBoard = () => {
 
   const renderScoreCards = () => {
     if (!scoreCards.length) return <div>Loading...</div>;
-    
+
     return (
       <div className="score-cards-container">
         {scoreCards.map((card, index) => {
@@ -79,7 +84,7 @@ const GameBoard = () => {
             left: `${index * 5}px`, // This offsets each card horizontally. Adjust as necessary.
             zIndex: index, // Ensures that cards overlap correctly.
           };
-  
+
           return (
             <img
               key={index}
@@ -90,14 +95,15 @@ const GameBoard = () => {
             />
           );
         })}
-        <div className="score-cards-count">Score Cards: {scoreCards.length}</div>
+        <div className="score-cards-count">
+          Score Cards: {scoreCards.length}
+        </div>
       </div>
     );
   };
 
   const renderGridItems = () => {
     if (!deck.length) return <div>Loading...</div>;
-    console.log("deck:", deck);
     return deck.slice(0, 25).map((card, index) => {
       const cardKey = `card_${card.value.charAt(0)}${card.suit.charAt(0)}`;
       const cardImage = cardImages[cardKey] || cardBackImage;
@@ -121,9 +127,11 @@ const GameBoard = () => {
     restartGame();
   };
 
+  // Reset clicked cards and feedback when a new round starts
   useEffect(() => {
-    checkEndGame();
-  }, [deck, checkEndGame]);
+    setClickedCards([]);
+    setFeedback("");
+  }, [currentRound]);
 
   return (
     <>
