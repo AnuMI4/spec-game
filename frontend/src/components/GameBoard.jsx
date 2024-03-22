@@ -108,33 +108,66 @@ const GameBoard = () => {
     }
   };
 
+  // const renderScoreCards = () => {
+  //   if (!scoreCards.length) return <div>Loading...</div>;
+
+  //   return (
+  //     <div className="score-cards-container">
+  //       {scoreCards.map((card, index) => {
+  //         const cardKey = `card_${card.value.charAt(0)}${card.suit.charAt(0)}`;
+  //         const cardImage = cardBackImage;
+  //         const style = {
+  //           left: `${index * 5}px`, // This offsets each card horizontally. Adjust as necessary.
+  //           zIndex: index, // Ensures that cards overlap correctly.
+  //         };
+
+  //         return (
+  //           <img
+  //             key={index}
+  //             className="score-card"
+  //             src={cardImage}
+  //             alt={`Card ${card.value} of ${card.suit}`}
+  //             style={style}
+  //           />
+  //         );
+  //       })}
+  //       <div className="score-cards-count">
+  //         Score Cards: {scoreCards.length}
+  //       </div>
+  //     </div>
+  //   );
+  // };
+
   const renderScoreCards = () => {
     if (!scoreCards.length) return <div>Loading...</div>;
 
     return (
-      <div className="score-cards-container">
+      <>
         {scoreCards.map((card, index) => {
           const cardKey = `card_${card.value.charAt(0)}${card.suit.charAt(0)}`;
-          const cardImage = cardBackImage;
-          const style = {
-            left: `${index * 5}px`, // This offsets each card horizontally. Adjust as necessary.
-            zIndex: index, // Ensures that cards overlap correctly.
-          };
+          const cardImage = cardBackImage; // Default to back image
+          const hoverImage = cardImages[cardKey]; // Image when hovered
 
           return (
-            <img
+            <div
               key={index}
               className="score-card"
-              src={cardImage}
-              alt={`Card ${card.value} of ${card.suit}`}
-              style={style}
-            />
+              style={{ left: `${index * 10}px`, zIndex: index }}
+            >
+              <img
+                src={cardImage}
+                alt={`Card ${card.value} of ${card.suit}`}
+                onMouseOver={(e) => (e.currentTarget.src = hoverImage)} // Change to the actual card image on hover
+                onMouseOut={(e) => (e.currentTarget.src = cardImage)} // Revert to the back image when not hovered
+                style={{ height: "100%", width: "60px" }}
+              />
+            </div>
           );
         })}
         <div className="score-cards-count">
           Score Cards: {scoreCards.length}
         </div>
-      </div>
+      </>
     );
   };
 

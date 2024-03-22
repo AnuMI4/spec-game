@@ -24,6 +24,11 @@ const WinnerAnnouncementModal = () => {
   )}${lastDeckCard?.suit.charAt(0)}`;
   const lastDeckCardImage = cardImages[lastDeckCardKey];
 
+  console.log({
+    lastDeckCardImage,
+    lastGuessedCards,
+  });
+
   if (!isGameOver) return null;
 
   return (
