@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useGame } from "@/context/useGame";
 import { patternGuess } from "@/utils";
 
-const LastGuessInput = () => {
+const LastGuessInputModal = ({ onClose }) => {
   const { totalPlayers, saveLastGuesses } = useGame();
   const [playerGuesses, setPlayerGuesses] = useState({});
   const [errors, setErrors] = useState({});
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   // Dynamically initialize states based on totalPlayers
   useEffect(() => {
@@ -30,9 +30,9 @@ const LastGuessInput = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const suits = Object.values(playerGuesses).map(guess => guess[0]);
-    const values = Object.values(playerGuesses).map(guess => guess[1]);
-  
+    const suits = Object.values(playerGuesses).map((guess) => guess[0]);
+    const values = Object.values(playerGuesses).map((guess) => guess[1]);
+
     // Function to check if there are duplicates in an array
     const hasDuplicates = (array) => new Set(array).size !== array.length;
 
@@ -43,37 +43,42 @@ const LastGuessInput = () => {
         (element, index) =>
           Object.values(playerGuesses).indexOf(element) === index
       ) &&
-      !hasDuplicates(suits) && 
+      !hasDuplicates(suits) &&
       !hasDuplicates(values);
 
     if (allValid) {
       saveLastGuesses(playerGuesses);
-      navigate("/game-board");
+      onClose();
+      // navigate("/game-board");
     } else {
       alert("Please enter valid guesses for all players.");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {Object.entries(playerGuesses).map(([player, guess], index) => (
-        <div key={player}>
-          <label htmlFor={`guess-${index}`}>
-            Player {index + 1} Prediction:
-          </label>
-          <input
-            id={`guess-${index}`}
-            type="text"
-            value={guess}
-            onChange={(e) => handleChange(player, e.target.value)}
-            className={errors[player] ? "error" : ""}
-          />
-          {errors[player] && <p className="error">Invalid guess</p>}
-        </div>
-      ))}
-      <button type="submit">Submit Guesses</button>
-    </form>
+    <div className="modal-backdrop">
+      <div className="modal-content">
+        <form onSubmit={handleSubmit}>
+          {Object.entries(playerGuesses).map(([player, guess], index) => (
+            <div key={player}>
+              <label htmlFor={`guess-${index}`}>
+                Player {index + 1} Prediction:
+              </label>
+              <input
+                id={`guess-${index}`}
+                type="text"
+                value={guess}
+                onChange={(e) => handleChange(player, e.target.value)}
+                className={errors[player] ? "error" : ""}
+              />
+              {errors[player] && <p className="error">Invalid guess</p>}
+            </div>
+          ))}
+          <button type="submit">Submit Guesses</button>
+        </form>
+      </div>
+    </div>
   );
 };
 
-export default LastGuessInput;
+export default LastGuessInputModal;

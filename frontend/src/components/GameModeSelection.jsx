@@ -7,7 +7,7 @@ const GameModeSelection = () => {
 
   const handleModeSelection = (playerCount) => {
     setTotalPlayers(playerCount);
-    navigate("/last-guess");
+    navigate("/game-board");
   };
 
   return (

@@ -1,7 +1,6 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import GameModeSelection from "@/components/GameModeSelection";
-import LastGuessInput from "@/components/LastGuessInput";
 import GameBoard from "@/components/GameBoard";
 
 const Layout = () => {
@@ -14,7 +13,6 @@ const Layout = () => {
 
       <Routes>
         <Route path="/" element={<GameModeSelection />} />
-        <Route path="/last-guess" element={<LastGuessInput />} />
         <Route path="/game-board" element={<GameBoard />} />
       </Routes>
     </>

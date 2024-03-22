@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import cardBackImage from "cardsJS/cards/Red_Back.svg";
 import { useGame } from "@/context/useGame";
 import cardImages from "@/components/images";
-import GuessModal from "@/components/GuessModal";
-import WinnerAnnouncementModal from "@/components/WinnerAnnouncementModal";
+import GuessModal from "@/components/modals/GuessModal";
+import WinnerAnnouncementModal from "@/components/modals/WinnerAnnouncementModal";
 import { validateGuessFormat } from "@/utils";
+import LastGuessInputModal from "./modals/LastGuessInputModal";
 
 const GameBoard = () => {
   const {
@@ -15,13 +16,13 @@ const GameBoard = () => {
     calculateScore,
     updateScore,
     scores,
-    checkEndGame,
     restartGame,
     isGameOver,
     winner,
     totalPlayers,
     scoreCards,
     currentRound,
+    lastGuesses,
   } = useGame();
 
   console.log("deck:", deck);
@@ -31,6 +32,7 @@ const GameBoard = () => {
   const [clickedCards, setClickedCards] = useState([]);
   const [feedback, setFeedback] = useState("");
   const [lastGuessedCard, setLastGuessedCard] = useState(null);
+  const [isLastGuessModalOpen, setIsLastGuessModalOpen] = useState(false);
 
   const handleCardClick = (index) => {
     if (deck[index].revealed) return; // Prevent action on revealed cards
@@ -133,6 +135,13 @@ const GameBoard = () => {
     setFeedback("");
   }, [currentRound]);
 
+  // Show the last guess input modal when the round or game starts
+  useEffect(() => {
+    if (Object.keys(lastGuesses).length === 0) {
+      setIsLastGuessModalOpen(true);
+    }
+  }, [lastGuesses]);
+
   return (
     <>
       {feedback && <div className="feedback">{feedback}</div>}
@@ -158,6 +167,9 @@ const GameBoard = () => {
         winner={winner}
         onRestart={handleRestart}
       />
+      {isLastGuessModalOpen && (
+        <LastGuessInputModal onClose={() => setIsLastGuessModalOpen(false)} />
+      )}
     </>
   );
 };

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useGame } from "@/context/useGame";
-import ExitConfirmationModal from "@/components/ExitConfirmationModal";
+import ExitConfirmationModal from "@/components/modals/ExitConfirmationModal";
 
 const Navbar = () => {
   const [showExitModal, setShowExitModal] = useState(false);

@@ -160,21 +160,6 @@ export const GameProvider = ({ children }) => {
     }
   }, [currentRound, totalPlayers, scores]);
 
-  // Function to check if the game has ended
-  const checkEndGame = () => {
-    const allCardsRevealed = deck.every((card) => card.revealed);
-    if (allCardsRevealed) {
-      setIsGameOver(true);
-      const winningScore = Math.max(...Object.values(scores));
-      const winner = Object.keys(scores).find(
-        (key) => scores[key] === winningScore
-      );
-      setWinner(winner);
-
-      prepareNextRound();
-    }
-  };
-
   // Function to save the last guesses and start the game
   const saveLastGuesses = (guesses) => {
     setLastGuesses(guesses);
@@ -217,7 +202,6 @@ export const GameProvider = ({ children }) => {
         scores,
         isGameOver,
         winner,
-        checkEndGame,
         restartGame,
         totalPlayers,
         setTotalPlayers,
