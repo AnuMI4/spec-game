@@ -1,10 +1,7 @@
-import { useState } from 'react';
 import "../index.css";
 
-const CardRanks = () => {
+const CardRanks = ({ selectedRank, setSelectedRank }) => {
   const ranks = ["King", "Queen", "Jack", "Ten", "A", "Joker"];
-
-  const [selectedRank, setSelectedRank] = useState(null);
 
   const handleClick = (rank) => {
     console.log("Button clicked for:", rank);

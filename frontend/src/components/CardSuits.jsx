@@ -5,15 +5,13 @@ import iconDiamond from "../assets/diamond-suit.svg";
 import iconClub from "../assets/club-suit.svg";
 import iconSpade from "../assets/spade-1.svg";
 
-const CardSuits = () => {
+const CardSuits = ({ selectedSuit, setSelectedSuit }) => {
   const suits = [
     { name: "Hearts", icon: iconHeart },
     { name: "Diamonds", icon: iconDiamond },
     { name: "Clubs", icon: iconClub },
     { name: "Spades", icon: iconSpade },
   ];
-
-  const [selectedSuit, setSelectedSuit] = useState(null);
 
   const handleClick = (suit) => {
     console.log("Button clicked for:", suit.name);
@@ -27,9 +25,9 @@ const CardSuits = () => {
         {suits.map((suit, index) => (
           <button
             key={index}
-            className={selectedSuit === suit ? "my-button selected" : "my-button"}
+            className={selectedSuit?.name === suit.name ? "my-button selected" : "my-button"}
             onClick={() => handleClick(suit)}
-            disabled={selectedSuit !== null && selectedSuit !== suit}
+            disabled={selectedSuit !== null && selectedSuit?.name !== suit.name}
           >
             <img src={suit.icon} alt="Suit Icon" className="icon" />
             {suit.name}
