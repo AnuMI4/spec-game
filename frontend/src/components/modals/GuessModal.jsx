@@ -1,22 +1,17 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { patternGuess } from "@/utils";
+import CardRanks from "../CardRanks";
+import CardSuits from "../CardSuits";
 
 const GuessModal = ({ isOpen, onClose, onGuessSubmit, lastGuessedCard }) => {
   const [guess, setGuess] = useState("");
   const [error, setError] = useState("");
+  const [selectedRank, setSelectedRank] = useState(null);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (patternGuess.test(guess) && guess.toUpperCase() !== lastGuessedCard) {
-      onGuessSubmit(guess.toUpperCase());
-      setGuess("");
-      setError("");
-      onClose();
-    } else {
-      setError(
-        "Invalid guess format. Please follow the format: ValueSuit (e.g., AS, JD, 2H)."
-      );
-    }
+  const handleSubmit = () => {
+    console.log("HI");
+    console.log(selectedRank);
+    // onClose();
   };
 
   if (!isOpen) return null;
@@ -25,19 +20,10 @@ const GuessModal = ({ isOpen, onClose, onGuessSubmit, lastGuessedCard }) => {
     <div className="modal-backdrop">
       <div className="modal-content">
         <h3>Enter Your Guess</h3>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            value={guess}
-            onChange={(e) => setGuess(e.target.value)}
-            placeholder="e.g., AS, JD, QH"
-          />
-          {error && <p className="error">{error}</p>}
-          <button type="submit">Submit</button>
-          <button type="button" onClick={onClose}>
-            Cancel
-          </button>
-        </form>
+        <CardRanks />
+        <CardSuits />
+        <button type="submit" onClick={handleSubmit}>Submit</button>
+        <button type="button" onClick={onClose}>Cancel</button>
       </div>
     </div>
   );

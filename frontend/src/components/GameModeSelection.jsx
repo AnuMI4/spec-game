@@ -5,18 +5,17 @@ const GameModeSelection = () => {
   const { setTotalPlayers } = useGame();
   let navigate = useNavigate();
 
-  const handleModeSelection = (playerCount) => {
+  const handleModeSelection = (playerCount, isComp = false) => {
     setTotalPlayers(playerCount);
     navigate("/game-board");
   };
 
   return (
     <>
+      <h1>Welcome to the Game</h1>
       <h2>Select Game Mode</h2>
       <div className="game-mode-selection">
-        <button onClick={() => alert("Coming Soon!")}>
-          Computer vs Computer
-        </button>
+        <button onClick={() => handleModeSelection(2, true)}>Computer vs Player</button>
         <button onClick={() => handleModeSelection(2)}>2 Player</button>
         <button onClick={() => handleModeSelection(3)}>3 Player</button>
         <button onClick={() => handleModeSelection(4)}>4 Player</button>

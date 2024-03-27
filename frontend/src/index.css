@@ -297,9 +297,9 @@ button:focus {
 }
 
 /* Hover Reveal for Score Cards */
-.score-card:hover .card-image {
-  visibility: visible; /* Show card image on hover */
-}
+/* .score-card:hover .card-image {
+  visibility: visible;
+} */
 
 .card-image {
   position: absolute;
@@ -307,4 +307,61 @@ button:focus {
   left: 50%;
   transform: translateX(-50%); /* Center horizontally */
   transition: visibility 0.2s, opacity 0.2s ease;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.suit-button {
+  margin-bottom: 10px; /* Adjust as needed */
+  padding: 5px 10px; /* Adjust padding for button size */
+  font-size: 14px; /* Adjust font size */
+  width: 120px; /* Adjust width as needed */
+}
+
+.icon {
+  margin-right: 5px; /* Add margin between icon and text */
+}
+
+.game-controls {
+  display: flex;
+  align-items: center; /* Align items vertically */
+  margin-bottom: 10px; /* Add margin bottom for spacing */
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.my-button {
+  display: flex;
+  align-items: center;
+  margin: 5px;
+  justify-content: center;
+  background-color: #f4f4f4;
+  color: #000;
+}
+
+.icon {
+  width: 24px; /* Adjust size as needed */
+  height: 24px; /* Adjust size as needed */
+}
+
+.card-ranks, .card-suits {
+  background-color: #f2f2f2; /* Light grey background */
+  padding: 20px; /* Add padding for a little margin */
+  margin: 5px; /* Add margin at the bottom */
+}
+
+.selected {
+  background-color: #0303fc;
+  color: white;
+}
+
+button:disabled {
+  pointer-events: none;
+  opacity: 0.5;
 }

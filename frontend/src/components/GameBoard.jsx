@@ -7,6 +7,9 @@ import WinnerAnnouncementModal from "@/components/modals/WinnerAnnouncementModal
 import LastGuessInputModal from "@/components/modals/LastGuessInputModal";
 import RevealLastCardModal from "@/components/modals/RevealLastCardModal";
 import { validateGuessFormat } from "@/utils";
+import CardSuits from "./CardSuits";
+import CardRanks from "./CardRanks";
+import ComputerPlayer from "./ComputerPlayer";
 
 const GameBoard = () => {
   const {
@@ -210,14 +213,30 @@ const GameBoard = () => {
   }, [lastGuesses]);
 
   return (
-    <>
-      {feedback && <div className="feedback">{feedback}</div>}
+    <div className="container">
+    {/* <div className="container-suit">
+      <div className="game-controls">
+          <CardSuits />
+        </div>
+    </div>
+    <div className="container-rank">
+      <div className="section-card-ranks">
+          <CardRanks />
+        </div>
+    </div> */}
+    <div className="container-grid">
+    {feedback && <div className="feedback">{feedback}</div>}
       <div className="scoreboard">
         {Object.entries(scores).map(([playerId, score]) => (
           <p key={playerId}>
             {playerId} Score: {score}
           </p>
         ))}
+        <div>
+          <p key={currentRound}>
+            Round: {currentRound}
+          </p>
+        </div>
       </div>
       <div className="grid-container">
         <div className="game-board">{renderGridItems()}</div>
@@ -234,16 +253,18 @@ const GameBoard = () => {
         winner={winner}
         onRestart={handleRestart}
       />
-      <LastGuessInputModal
+      {/* <LastGuessInputModal
         isOpen={isLastGuessModalOpen}
         onClose={() => setIsLastGuessModalOpen(false)}
-      />
+      /> */}
       <RevealLastCardModal
         isOpen={isRevealLastCardModalOpen}
         onClose={() => setIsRevealLastCardModalOpen(false)}
         onReveal={handleLastCardReveal}
       />
-    </>
+    </div>
+    {/* <ComputerPlayer /> */}
+    </div>
   );
 };
 

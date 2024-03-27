@@ -9,7 +9,7 @@ const Layout = () => {
   return (
     <>
       {location.pathname !== "/" && <Navbar />}
-      <h1>Welcome to the Game</h1>
+      {/* <h1>Welcome to the Game</h1> */}
 
       <Routes>
         <Route path="/" element={<GameModeSelection />} />
