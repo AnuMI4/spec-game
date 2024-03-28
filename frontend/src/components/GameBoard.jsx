@@ -7,8 +7,6 @@ import WinnerAnnouncementModal from "@/components/modals/WinnerAnnouncementModal
 import LastGuessInputModal from "@/components/modals/LastGuessInputModal";
 import RevealLastCardModal from "@/components/modals/RevealLastCardModal";
 import { validateGuessFormat } from "@/utils";
-import CardSuits from "./CardSuits";
-import CardRanks from "./CardRanks";
 import ComputerPlayer from "./ComputerPlayer";
 
 const GameBoard = () => {
@@ -43,6 +41,7 @@ const GameBoard = () => {
   const [isRevealLastCardModalOpen, setIsRevealLastCardModalOpen] =
     useState(false);
   const [lastCard, setLastCard] = useState(null);
+  const [cardIndex, setCardIndex] = useState(null);
 
   const handleCardClick = (index) => {
     if (deck[index].revealed) return; // Prevent action on revealed cards
@@ -110,36 +109,6 @@ const GameBoard = () => {
       setClickedCards([...clickedCards, currentGuessIndex]);
     }
   };
-
-  // const renderScoreCards = () => {
-  //   if (!scoreCards.length) return <div>Loading...</div>;
-
-  //   return (
-  //     <div className="score-cards-container">
-  //       {scoreCards.map((card, index) => {
-  //         const cardKey = `card_${card.value.charAt(0)}${card.suit.charAt(0)}`;
-  //         const cardImage = cardBackImage;
-  //         const style = {
-  //           left: `${index * 5}px`, // This offsets each card horizontally. Adjust as necessary.
-  //           zIndex: index, // Ensures that cards overlap correctly.
-  //         };
-
-  //         return (
-  //           <img
-  //             key={index}
-  //             className="score-card"
-  //             src={cardImage}
-  //             alt={`Card ${card.value} of ${card.suit}`}
-  //             style={style}
-  //           />
-  //         );
-  //       })}
-  //       <div className="score-cards-count">
-  //         Score Cards: {scoreCards.length}
-  //       </div>
-  //     </div>
-  //   );
-  // };
 
   const renderScoreCards = () => {
     if (!scoreCards.length) return <div>Loading...</div>;
@@ -214,56 +183,48 @@ const GameBoard = () => {
 
   return (
     <div className="container">
-    {/* <div className="container-suit">
-      <div className="game-controls">
-          <CardSuits />
+      <div className="container-grid">
+        {feedback && <div className="feedback">{feedback}</div>}
+        <div className="scoreboard">
+          {Object.entries(scores).map(([playerId, score]) => (
+            <p key={playerId}>
+              {playerId} Score: {score}
+            </p>
+          ))}
+          <div>
+            <p key={currentRound}>
+              Round: {currentRound}
+            </p>
+          </div>
         </div>
-    </div>
-    <div className="container-rank">
-      <div className="section-card-ranks">
-          <CardRanks />
+        <div className="grid-container">
+          <div className="game-board">{renderGridItems()}</div>
+          <div className="score-cards-container">{renderScoreCards()}</div>
         </div>
-    </div> */}
-    <div className="container-grid">
-    {feedback && <div className="feedback">{feedback}</div>}
-      <div className="scoreboard">
-        {Object.entries(scores).map(([playerId, score]) => (
-          <p key={playerId}>
-            {playerId} Score: {score}
-          </p>
-        ))}
-        <div>
-          <p key={currentRound}>
-            Round: {currentRound}
-          </p>
-        </div>
+        <GuessModal
+          isOpen={isGuessModalOpen}
+          onClose={() => setIsGuessModalOpen(false)}
+          onGuessSubmit={handleGuessSubmit}
+          lastGuessedCard={lastGuessedCard}
+        />
+        <WinnerAnnouncementModal
+          isShown={isGameOver}
+          winner={winner}
+          onRestart={handleRestart}
+        />
+        <RevealLastCardModal
+          isOpen={isRevealLastCardModalOpen}
+          onClose={() => setIsRevealLastCardModalOpen(false)}
+          onReveal={handleLastCardReveal}
+        />
       </div>
-      <div className="grid-container">
-        <div className="game-board">{renderGridItems()}</div>
-        <div className="score-cards-container">{renderScoreCards()}</div>
-      </div>
-      <GuessModal
-        isOpen={isGuessModalOpen}
-        onClose={() => setIsGuessModalOpen(false)}
-        onGuessSubmit={handleGuessSubmit}
-        lastGuessedCard={lastGuessedCard}
+      <ComputerPlayer
+        deck={deck}
+        onCardClick={handleCardClick}
+        onGuess={(suit, rank) => {
+          console.log("Computer guessed:", suit, rank);
+        }}
       />
-      <WinnerAnnouncementModal
-        isShown={isGameOver}
-        winner={winner}
-        onRestart={handleRestart}
-      />
-      {/* <LastGuessInputModal
-        isOpen={isLastGuessModalOpen}
-        onClose={() => setIsLastGuessModalOpen(false)}
-      /> */}
-      <RevealLastCardModal
-        isOpen={isRevealLastCardModalOpen}
-        onClose={() => setIsRevealLastCardModalOpen(false)}
-        onReveal={handleLastCardReveal}
-      />
-    </div>
-    {/* <ComputerPlayer /> */}
     </div>
   );
 };
