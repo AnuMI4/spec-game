@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import GuessModal from "../components/modals/GuessModal";
+import {iconHeart, iconClub, iconDiamond, iconSpade} from "../components/icons";
 
 function getCardIndex(deck) {
   const indexesWithRevealedFalse = deck
@@ -13,40 +15,45 @@ function getCardIndex(deck) {
   return indexesWithRevealedFalse[randomIndex];
 }
 
-function generatePrediction() {
-  const ranks = ['King', 'Queen', 'Jack', 'Ten', 'A', 'Joker'];
-  const suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
-
+function generateRank() {
+  const ranks = ["King", "Queen", "Jack", "Ten", "A", "Joker"];
   const randomRankIndex = Math.floor(Math.random() * ranks.length);
-  const randomSuitIndex = Math.floor(Math.random() * suits.length);
-
-  const randomRank = ranks[randomRankIndex];
-  const randomSuit = suits[randomSuitIndex];
-
-  return {
-    rank: randomRank,
-    suit: randomSuit
-  };
+  return ranks[randomRankIndex];
 }
 
-const ComputerPlayer = ({ deck, onCardClick, onGuess }) => {
-  const [cardIndex, setCardIndex] = useState(null); // Declare cardIndex as a state variable
+function generateSuit() {
+  const suits = [
+    { name: "Hearts", icon: iconHeart },
+    { name: "Diamonds", icon: iconDiamond },
+    { name: "Clubs", icon: iconClub },
+    { name: "Spades", icon: iconSpade },
+  ];
+  const randomSuitIndex = Math.floor(Math.random() * suits.length);
+  return suits[randomSuitIndex];
+}
+
+const ComputerPlayer = ({ deck, onCardClick, onGuessSubmit, onClose }) => {
+  const [cardIndex, setCardIndex] = useState(null);
+  const [generatedRank, setGeneratedRank] = useState(null); // New state for generated rank
+  const [generatedSuit, setGeneratedSuit] = useState(null); // New state for generated suit
 
   useEffect(() => {
-    // Logic to select a card index from the deck
-    const index = getCardIndex(deck); // Update the cardIndex state variable
+    const index = getCardIndex(deck);
     setCardIndex(index);
-    onCardClick(index); // Call the function passed from the parent component
+    onCardClick(index);
 
-    // Generate the prediction for the guess
-    const prediction = generatePrediction();
-    // Pass the prediction to the parent component
-    onGuess(prediction.suit, prediction.rank);
-  }, [deck, onCardClick, onGuess]);
+    // Generate the rank and suit when the component mounts or when the deck changes
+    const rank = generateRank();
+    const suit = generateSuit();
+    setGeneratedRank(rank);
+    setGeneratedSuit(suit);
+    console.log(suit);
+  }, [deck, onCardClick]);
 
   return (
     <div>
       <h2>Computer's Turn</h2>
+      <GuessModal isOpen={true} onClose={onClose} onGuessSubmit={onGuessSubmit} generatedRank={generatedRank} generatedSuit={generatedSuit} />
       <p>{cardIndex}</p>
     </div>
   );

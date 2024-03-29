@@ -1,14 +1,27 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { patternGuess } from "@/utils";
 import CardRanks from "../CardRanks";
 import CardSuits from "../CardSuits";
 
-const GuessModal = ({ isOpen, onClose, onGuessSubmit, lastGuessedCard }) => {
+const GuessModal = ({ isOpen, onClose, onGuessSubmit, lastGuessedCard, generatedRank, generatedSuit }) => {
   const [selectedRank, setSelectedRank] = useState(null);
   const [selectedSuit, setSelectedSuit] = useState(null);
-  const [guess, setGuess] = useState("");
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    // Automatically select the generated rank when it's available
+    if (generatedRank) {
+      setSelectedRank(generatedRank);
+    }
+
+    // Automatically select the generated suit when it's available
+    if (generatedSuit) {
+      setSelectedSuit(generatedSuit);
+    }
+  }, [generatedRank, generatedSuit]);
+
+
+  // Function to handle guess submission
   const handleSubmit = (e) => {
     e.preventDefault();
 

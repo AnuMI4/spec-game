@@ -218,13 +218,17 @@ const GameBoard = () => {
           onReveal={handleLastCardReveal}
         />
       </div>
-      <ComputerPlayer
-        deck={deck}
-        onCardClick={handleCardClick}
-        onGuess={(suit, rank) => {
-          console.log("Computer guessed:", suit, rank);
-        }}
-      />
+      {currentPlayer === 2 && (
+        <ComputerPlayer
+          deck={deck}
+          onCardClick={handleCardClick}
+          onGuess={(suit, rank) => {
+            console.log("Computer guessed:", suit, rank);
+          }}
+          onGuessSubmit={handleGuessSubmit}
+          onClose={() => setIsGuessModalOpen(false)}
+        />
+      )}
     </div>
   );
 };

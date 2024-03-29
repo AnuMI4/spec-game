@@ -1,9 +1,5 @@
-import { useState } from 'react';
 import "../index.css";
-import iconHeart from "../assets/heart-red.svg";
-import iconDiamond from "../assets/diamond-suit.svg";
-import iconClub from "../assets/club-suit.svg";
-import iconSpade from "../assets/spade-1.svg";
+import {iconHeart, iconClub, iconDiamond, iconSpade} from "../components/icons";
 
 const CardSuits = ({ selectedSuit, setSelectedSuit }) => {
   const suits = [
