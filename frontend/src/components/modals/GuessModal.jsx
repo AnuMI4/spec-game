@@ -36,7 +36,7 @@ const GuessModal = ({ isOpen, onClose, onGuessSubmit, lastGuessedCard, generated
       onGuessSubmit(guessValue.toUpperCase());
       setSelectedRank(null);
       setSelectedSuit(null);
-      setGuess("");
+      // setGuess("");
       setError("");
       onClose();
     } else {
