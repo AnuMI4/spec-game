@@ -47,7 +47,6 @@ const ComputerPlayer = ({ deck, onCardClick, onGuessSubmit, onClose }) => {
     const suit = generateSuit();
     setGeneratedRank(rank);
     setGeneratedSuit(suit);
-    console.log(suit);
   }, [deck, onCardClick]);
 
   return (

@@ -212,6 +212,10 @@ const GameBoard = () => {
           winner={winner}
           onRestart={handleRestart}
         />
+        <LastGuessInputModal
+        isOpen={isLastGuessModalOpen}
+        onClose={() => setIsLastGuessModalOpen(false)}
+        />
         <RevealLastCardModal
           isOpen={isRevealLastCardModalOpen}
           onClose={() => setIsRevealLastCardModalOpen(false)}
