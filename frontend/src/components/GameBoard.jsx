@@ -197,6 +197,7 @@ const GameBoard = () => {
             </p>
           </div>
         </div>
+        <div className="turn">Player {currentPlayer}'s turn</div>
         <div className="grid-container">
           <div className="game-board">{renderGridItems()}</div>
           <div className="score-cards-container">{renderScoreCards()}</div>
@@ -226,9 +227,6 @@ const GameBoard = () => {
         <ComputerPlayer
           deck={deck}
           onCardClick={handleCardClick}
-          onGuess={(suit, rank) => {
-            console.log("Computer guessed:", suit, rank);
-          }}
           onGuessSubmit={handleGuessSubmit}
           onClose={() => setIsGuessModalOpen(false)}
         />

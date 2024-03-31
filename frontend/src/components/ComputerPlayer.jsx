@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import GuessModal from "../components/modals/GuessModal";
 import {iconHeart, iconClub, iconDiamond, iconSpade} from "../components/icons";
+const sleep = (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
 
 function getCardIndex(deck) {
   const indexesWithRevealedFalse = deck
@@ -38,16 +41,34 @@ const ComputerPlayer = ({ deck, onCardClick, onGuessSubmit, onClose }) => {
   const [generatedSuit, setGeneratedSuit] = useState(null); // New state for generated suit
 
   useEffect(() => {
-    const index = getCardIndex(deck);
-    setCardIndex(index);
-    onCardClick(index);
-
-    // Generate the rank and suit when the component mounts or when the deck changes
-    const rank = generateRank();
-    const suit = generateSuit();
-    setGeneratedRank(rank);
-    setGeneratedSuit(suit);
-  }, [deck, onCardClick]);
+    let isMounted = true; // Flag to track component mount status
+    const fetchData = async () => {
+      const index = getCardIndex(deck);
+      setCardIndex(index);
+      onCardClick(index);
+  
+      // Generate the rank and suit when the component mounts or when the deck changes
+      const rank = generateRank();
+      const suit = generateSuit();
+      const guessValue = `${rank.charAt(0)}${suit?.name.charAt(0)}`;
+      setGeneratedRank(rank);
+      await sleep(1000);
+      if (isMounted) { // Check if component is still mounted before updating state
+        setGeneratedSuit(suit);
+        await sleep(1000);
+        onGuessSubmit(guessValue);
+      }
+    };
+  
+    fetchData();
+  
+    // Cleanup function
+    return () => {
+      isMounted = false; // Update the flag to indicate unmounting
+      // Add any cleanup tasks here, if needed
+    };
+  }, [deck, onCardClick, onGuessSubmit]);
+  
 
   return (
     <div>
