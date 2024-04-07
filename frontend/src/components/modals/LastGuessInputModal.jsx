@@ -5,7 +5,7 @@ import CardRanks from "../CardRanks";
 import CardSuits from "../CardSuits";
 
 const LastGuessInputModal = ({ isOpen, onClose }) => {
-  const { totalPlayers, saveLastGuesses, setLastGuessedCards } = useGame();
+  const { totalPlayers, saveLastGuesses, setLastGuessedCards, gameMode } = useGame();
   const [playerGuesses, setPlayerGuesses] = useState({});
   const [errors, setErrors] = useState({});
 
@@ -89,7 +89,9 @@ const LastGuessInputModal = ({ isOpen, onClose }) => {
           <h3>Last Card Predictions</h3>
           {Object.entries(playerGuesses).map(([player, guess], index) => (
             <div key={player}>
-              <h3>Player {index + 1} Prediction:</h3>
+              {gameMode != 'PvC' && <h3>Player {index + 1} Prediction:</h3>}
+              {gameMode === 'PvC' && index == 0 && <h3>Player 1 Prediction:</h3>}
+              {gameMode === 'PvC' && index == 1 && <h3>Computer's Prediction:</h3>}
               <CardRanks selectedRank={guess.rank} setSelectedRank={(rank) => handleRankChange(player, rank)} />
               {guess.rank !== 'Joker' && <CardSuits selectedSuit={guess.suit} setSelectedSuit={(suit) => handleSuitChange(player, suit)} />}
               {errors[player]?.rank && <p className="error">Please select a rank</p>}

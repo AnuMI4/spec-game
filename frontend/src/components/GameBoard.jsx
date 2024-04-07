@@ -27,6 +27,7 @@ const GameBoard = () => {
     lastGuesses,
     calculateWinner,
     lastGuessedCards,
+    gameMode
   } = useGame();
 
   console.log("lastGuessedCards: ", lastGuessedCards);
@@ -186,11 +187,21 @@ const GameBoard = () => {
       <div className="container-grid">
         {feedback && <div className="feedback">{feedback}</div>}
         <div className="scoreboard">
-          {Object.entries(scores).map(([playerId, score]) => (
-            <p key={playerId}>
-              {playerId} Score: {score}
-            </p>
-          ))}
+          <>
+            {Object.entries(scores).map(([playerId, score]) => {
+              // Determine the display label based on the playerId and gameMode
+              let displayLabel = playerId;
+              if (gameMode === 'PvC') {
+                displayLabel = playerId === 'player1' ? 'Player' : 'Computer';
+              }
+
+              return (
+                <p key={playerId}>
+                  {displayLabel} Score: {score}
+                </p>
+              );
+            })}
+          </>
           <div>
             <p key={currentRound}>
               Round: {currentRound}
@@ -223,13 +234,13 @@ const GameBoard = () => {
           onReveal={handleLastCardReveal}
         />
       </div>
-      {currentPlayer === 2 && (
-        <ComputerPlayer
-          deck={deck}
-          onCardClick={handleCardClick}
-          onGuessSubmit={handleGuessSubmit}
-          onClose={() => setIsGuessModalOpen(false)}
-        />
+      {currentPlayer === 2 && gameMode === 'PvC' && (
+          <ComputerPlayer
+            deck={deck}
+            onCardClick={handleCardClick}
+            onGuessSubmit={handleGuessSubmit}
+            onClose={() => setIsGuessModalOpen(false)}
+          />
       )}
     </div>
   );

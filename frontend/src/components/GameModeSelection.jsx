@@ -2,13 +2,15 @@ import { useNavigate } from "react-router-dom";
 import { useGame } from "@/context/useGame";
 
 const GameModeSelection = () => {
-  const { setTotalPlayers } = useGame();
+  const { setTotalPlayers, set, setGameMode } = useGame();
   let navigate = useNavigate();
 
   const handleModeSelection = (playerCount, isComp = false) => {
     setTotalPlayers(playerCount);
+    setGameMode(isComp ? 'PvC' : 'PvP');
     navigate("/game-board");
   };
+
 
   return (
     <>

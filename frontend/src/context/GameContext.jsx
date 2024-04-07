@@ -21,6 +21,9 @@ export const GameProvider = ({ children }) => {
   const [lastGuessedCards, setLastGuessedCards] = useState(null);
   const [lastDeckCard, setLastDeckCard] = useState(null);
 
+  const [gameMode, setGameMode] = useState('PvP'); // Default to Player vs Player
+
+
   // Helper function for updating scores
   const updateScore = (player, score) => {
     const key = `player${player}`;
@@ -215,6 +218,8 @@ export const GameProvider = ({ children }) => {
         lastGuessedCards,
         setLastGuessedCards,
         lastDeckCard,
+        gameMode, 
+        setGameMode 
       }}
     >
       {children}
