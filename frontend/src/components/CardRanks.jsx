@@ -14,6 +14,7 @@ const CardRanks = ({ selectedRank, setSelectedRank }) => {
       <div className="button-container">
         {ranks.map((rank, index) => (
           <button
+            type="button"
             key={index}
             className={selectedRank === rank ? "my-button selected" : "my-button"}
             onClick={() => handleClick(rank)}

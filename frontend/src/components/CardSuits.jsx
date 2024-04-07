@@ -20,6 +20,7 @@ const CardSuits = ({ selectedSuit, setSelectedSuit }) => {
       <div className="button-container">
         {suits.map((suit, index) => (
           <button
+            type="button"
             key={index}
             className={selectedSuit?.name === suit.name ? "my-button selected" : "my-button"}
             onClick={() => handleClick(suit)}

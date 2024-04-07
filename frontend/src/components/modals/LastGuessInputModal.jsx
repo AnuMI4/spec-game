@@ -1,86 +1,103 @@
 import { useEffect, useState } from "react";
 import { useGame } from "@/context/useGame";
-import { convertGuessToCard, patternGuess } from "@/utils";
+import { convertGuessToCard } from "@/utils";
+import CardRanks from "../CardRanks";
+import CardSuits from "../CardSuits";
 
 const LastGuessInputModal = ({ isOpen, onClose }) => {
   const { totalPlayers, saveLastGuesses, setLastGuessedCards } = useGame();
   const [playerGuesses, setPlayerGuesses] = useState({});
   const [errors, setErrors] = useState({});
-  // const navigate = useNavigate();
 
   // Dynamically initialize states based on totalPlayers
   useEffect(() => {
     const initialGuesses = {};
     const initialErrors = {};
     for (let i = 1; i <= totalPlayers; i++) {
-      initialGuesses[`player${i}`] = "";
-      initialErrors[`player${i}`] = false;
+      initialGuesses[`player${i}`] = { rank: null, suit: null };
+      initialErrors[`player${i}`] = { rank: false, suit: false };
     }
     setPlayerGuesses(initialGuesses);
     setErrors(initialErrors);
   }, [totalPlayers, isOpen]);
 
-  const handleChange = (player, value) => {
-    const isValid = patternGuess.test(value.toUpperCase());
-    setPlayerGuesses((prev) => ({ ...prev, [player]: value.toUpperCase() }));
-    setErrors((prev) => ({ ...prev, [player]: !isValid }));
+  const handleRankChange = (player, selectedRank) => {
+    setPlayerGuesses((prev) => ({
+      ...prev,
+      [player]: { ...prev[player], rank: selectedRank }
+    }));
+  };
+
+  const handleSuitChange = (player, selectedSuit) => {
+    // Since selectedSuit is an object, we're directly setting it here
+    setPlayerGuesses(prev => ({
+      ...prev,
+      [player]: { ...prev[player], suit: selectedSuit },
+    }));
+  };
+  
+
+  const validateGuesses = () => {
+    let allValid = true;
+    const newErrors = { ...errors };
+
+    Object.entries(playerGuesses).forEach(([player, { rank, suit }]) => {
+      const isValidRank = rank !== null;
+      const isValidSuit = rank === 'Joker' || suit !== null; // Suit is not required if rank is Joker
+      newErrors[player] = { rank: !isValidRank, suit: !isValidSuit };
+
+      if (!isValidRank || !isValidSuit) allValid = false;
+    });
+
+    setErrors(newErrors);
+    return allValid;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+  
+    // Assuming validation logic checks if every player has made necessary selections
+    const allValid = Object.entries(playerGuesses).every(([player, { rank, suit }]) => {
+      // Ensure a rank is selected for every player. Adjust logic if necessary for suits.
+      return rank !== null && (rank === 'Joker' || suit !== null);
+    });
 
-    const suits = Object.values(playerGuesses).map((guess) => guess[0]);
-    const values = Object.values(playerGuesses).map((guess) => guess[1]);
-
-    // Function to check if there are duplicates in an array
-    const hasDuplicates = (array) => new Set(array).size !== array.length;
-
-    const allValid =
-      Object.values(errors).every((error) => !error) &&
-      Object.values(playerGuesses).every((guess) => patternGuess.test(guess)) &&
-      Object.values(playerGuesses).every(
-        (element, index) =>
-          Object.values(playerGuesses).indexOf(element) === index
-      ) &&
-      !hasDuplicates(suits) &&
-      !hasDuplicates(values);
-
-    if (allValid) {
-      saveLastGuesses(playerGuesses);
-      setLastGuessedCards(
-        Object.values(playerGuesses).map((guess) => convertGuessToCard(guess))
-      );
-      onClose();
-      setPlayerGuesses({});
-    } else {
-      alert("Please enter valid guesses for all players.");
+    if (!allValid) {
+      alert("Please make valid selections for all players.");
+      return; // Stop the form submission if not all selections are valid.
     }
+  
+    const guessValues = {};
+    Object.entries(playerGuesses).forEach(([player, { rank, suit }]) => {
+      const guessValue = rank === 'Joker' ? 'JR' : `${rank.charAt(0)}${suit.name.charAt(0)}`;
+      guessValues[player] = guessValue;
+    });
+  
+    saveLastGuesses(guessValues);
+    setLastGuessedCards(Object.values(guessValues).map(convertGuessToCard));
+    onClose();
+    setPlayerGuesses({});
   };
+  
 
   if (!isOpen) return null;
-
-  console.log("playerGuesses: ", playerGuesses);
 
   return (
     <div className="modal-backdrop">
       <div className="modal-content">
         <form onSubmit={handleSubmit}>
+          <h3>Last Card Predictions</h3>
           {Object.entries(playerGuesses).map(([player, guess], index) => (
             <div key={player}>
-              <label htmlFor={`guess-${index}`}>
-                Player {index + 1} Prediction:
-              </label>
-              <input
-                id={`guess-${index}`}
-                type="text"
-                value={guess}
-                onChange={(e) => handleChange(player, e.target.value)}
-                className={errors[player] ? "error" : ""}
-              />
-              {errors[player] && <p className="error">Invalid guess</p>}
+              <h3>Player {index + 1} Prediction:</h3>
+              <CardRanks selectedRank={guess.rank} setSelectedRank={(rank) => handleRankChange(player, rank)} />
+              {guess.rank !== 'Joker' && <CardSuits selectedSuit={guess.suit} setSelectedSuit={(suit) => handleSuitChange(player, suit)} />}
+              {errors[player]?.rank && <p className="error">Please select a rank</p>}
+              {errors[player]?.suit && <p className="error">Please select a suit</p>}
             </div>
           ))}
           <button type="submit">Submit Guesses</button>
+          <button type="button" onClick={onClose}>Cancel</button>
         </form>
       </div>
     </div>
