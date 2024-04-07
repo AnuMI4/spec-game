@@ -25,12 +25,18 @@ const GuessModal = ({ isOpen, onClose, onGuessSubmit, lastGuessedCard, generated
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!selectedRank || !selectedSuit) {
-      setError("Please select both a rank and a suit.");
+    // Check if the user has selected both a rank and a suit only except for the Joker
+    if (!selectedRank || (selectedRank != 'Joker' && !selectedSuit)) {
+      setError("PLEASE SELECT BOTH RAND AND A SUIT.");
       return;
     }
 
-    const guessValue = `${selectedRank.charAt(0)}${selectedSuit.name.charAt(0)}`;
+    // Convert the selected rank and suit to the format of the guess
+    let guessValue = `${selectedRank.charAt(0)}${selectedSuit?.name?.charAt(0)}`;
+    // If the selected rank is Joker, set the guess value to JR
+    if(selectedRank === 'Joker') {
+      guessValue = 'JR';
+    }
 
     if (patternGuess.test(guessValue) && guessValue.toUpperCase() !== lastGuessedCard) {
       onGuessSubmit(guessValue.toUpperCase());
@@ -60,7 +66,7 @@ const GuessModal = ({ isOpen, onClose, onGuessSubmit, lastGuessedCard, generated
       <div className="modal-content">
         <h3>Enter Your Guess</h3>
         <CardRanks selectedRank={selectedRank} setSelectedRank={setSelectedRank} />
-        <CardSuits selectedSuit={selectedSuit} setSelectedSuit={setSelectedSuit} />
+        {selectedRank != 'Joker' && <CardSuits selectedSuit={selectedSuit} setSelectedSuit={setSelectedSuit} />}
         <form onSubmit={handleSubmit}>
           <input
             type="hidden"
