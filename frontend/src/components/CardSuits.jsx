@@ -1,13 +1,31 @@
 import "../index.css";
 import {iconHeart, iconClub, iconDiamond, iconSpade} from "../components/icons";
+import { useEffect } from "react";
 
-const CardSuits = ({ selectedSuit, setSelectedSuit }) => {
+const CardSuits = ({ selectedSuit, setSelectedSuit, gameMode, playerGuesses=[] }) => {
+  //Filter out suits that have already been selected by other players from playerGuesses
   const suits = [
     { name: "Hearts", icon: iconHeart },
     { name: "Diamonds", icon: iconDiamond },
     { name: "Clubs", icon: iconClub },
     { name: "Spades", icon: iconSpade },
-  ];
+  ].filter(suit => {
+    return !Object.values(playerGuesses).some(guess => guess.suit?.name === suit?.name);
+  });
+  // const suits = [
+  //   { name: "Hearts", icon: iconHeart },
+  //   { name: "Diamonds", icon: iconDiamond },
+  //   { name: "Clubs", icon: iconClub },
+  //   { name: "Spades", icon: iconSpade },
+  // ];
+
+  useEffect(() => {
+    // Automatically select the generated suit for computer
+    if (gameMode === 'PvC' && suits.length < 4 && selectedSuit === null) {
+        const randomSuitIndex = Math.floor(Math.random() * suits.length);
+        setSelectedSuit(suits[randomSuitIndex]);
+    }
+  });
 
   const handleClick = (suit) => {
     console.log("Button clicked for:", suit.name);

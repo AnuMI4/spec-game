@@ -47,6 +47,7 @@ const WinnerAnnouncementModal = () => {
             <h3>Last Card in Deck</h3>
             <img
               className="card-image"
+              style={{ position: "sticky" , width: "100px", height: "150px"}}
               src={lastDeckCardImage}
               alt={`Card ${lastDeckCard?.value} of ${lastDeckCard?.suit}`}
             />
@@ -65,6 +66,7 @@ const WinnerAnnouncementModal = () => {
                 <p>Player {index + 1}&apos;s Guess:</p>
                 <img
                   className="card-image"
+                  style={{ position: "sticky" , width: "100px", height: "150px"}}
                   src={cardImage}
                   alt={`Card ${card.value} of ${card.suit}`}
                 />

@@ -92,14 +92,14 @@ const LastGuessInputModal = ({ isOpen, onClose }) => {
               {gameMode != 'PvC' && <h3>Player {index + 1} Prediction:</h3>}
               {gameMode === 'PvC' && index == 0 && <h3>Player 1 Prediction:</h3>}
               {gameMode === 'PvC' && index == 1 && <h3>Computer's Prediction:</h3>}
-              <CardRanks selectedRank={guess.rank} setSelectedRank={(rank) => handleRankChange(player, rank)} />
-              {guess.rank !== 'Joker' && <CardSuits selectedSuit={guess.suit} setSelectedSuit={(suit) => handleSuitChange(player, suit)} />}
+              <CardRanks selectedRank={guess.rank} setSelectedRank={(rank) => handleRankChange(player, rank)} playerGuesses={playerGuesses} gameMode={gameMode}/>
+              {guess.rank !== 'Joker' && <CardSuits selectedSuit={guess.suit} setSelectedSuit={(suit) => handleSuitChange(player, suit)} playerGuesses={playerGuesses} gameMode={gameMode} />}
               {errors[player]?.rank && <p className="error">Please select a rank</p>}
               {errors[player]?.suit && <p className="error">Please select a suit</p>}
             </div>
           ))}
           <button type="submit">Submit Guesses</button>
-          <button type="button" onClick={onClose}>Cancel</button>
+          {/* <button type="button" onClick={onClose}>Cancel</button> */}
         </form>
       </div>
     </div>

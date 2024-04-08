@@ -1,7 +1,20 @@
+import { useEffect } from "react";
 import "../index.css";
 
-const CardRanks = ({ selectedRank, setSelectedRank }) => {
-  const ranks = ["King", "Queen", "Jack", "Ten", "A", "Joker"];
+const CardRanks = ({ selectedRank, setSelectedRank, gameMode, playerGuesses = [] }) => {
+  // Filter out ranks that have already been selected by other players from playerGuesses
+  const ranks = ["King", "Queen", "Jack", "Ten", "A", "Joker"].filter(rank => {
+    return !Object.values(playerGuesses).some(guess => guess.rank === rank);
+  });
+  // const ranks = ["King", "Queen", "Jack", "Ten", "A", "Joker"];
+
+  useEffect(() => {
+    // Automatically select the generated rank when for computer
+    if (gameMode === 'PvC' && ranks.length < 6 && selectedRank === null) {
+        const randomRankIndex = Math.floor(Math.random() * ranks.length);
+        setSelectedRank(ranks[randomRankIndex]);
+    }
+  });
 
   const handleClick = (rank) => {
     console.log("Button clicked for:", rank);
