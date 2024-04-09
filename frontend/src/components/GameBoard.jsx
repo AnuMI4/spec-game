@@ -6,6 +6,7 @@ import GuessModal from "@/components/modals/GuessModal";
 import WinnerAnnouncementModal from "@/components/modals/WinnerAnnouncementModal";
 import LastGuessInputModal from "@/components/modals/LastGuessInputModal";
 import RevealLastCardModal from "@/components/modals/RevealLastCardModal";
+import GuessResultModal from "./modals/GuessResultModal";
 import { validateGuessFormat } from "@/utils";
 import ComputerPlayer from "./ComputerPlayer";
 
@@ -39,8 +40,10 @@ const GameBoard = () => {
   const [feedback, setFeedback] = useState("");
   const [lastGuessedCard, setLastGuessedCard] = useState(null);
   const [isLastGuessModalOpen, setIsLastGuessModalOpen] = useState(false);
-  const [isRevealLastCardModalOpen, setIsRevealLastCardModalOpen] =
-    useState(false);
+  const [isRevealLastCardModalOpen, setIsRevealLastCardModalOpen] = useState(false);
+  const [isGuessResultModalOpen, setIsGuessResultModalOpen] = useState(false);
+  const [correctGuess, setCorrectGuess] = useState(false);
+  const [scorePoints, setScorePoints] = useState(0);
   const [lastCard, setLastCard] = useState(null);
   const [cardIndex, setCardIndex] = useState(null);
 
@@ -95,20 +98,34 @@ const GameBoard = () => {
     const nextPlayer = (currentPlayer % totalPlayers) + 1;
     if (score > 0) {
       updateScore(currentPlayer, score); // Add score to the current player
+      setIsGuessResultModalOpen(true);
+      setCorrectGuess(true);
+      setScorePoints(score);
       setFeedback(
         `Good guess! Score: ${score}. Now it's Player ${nextPlayer}'s turn.`
       );
     } else {
+      setIsGuessResultModalOpen(true);
+      setCorrectGuess(false);
+      setScorePoints(0);
       setFeedback(`Incorrect guess. Now it's Player ${nextPlayer}'s turn.`);
     }
 
-    console.log("switching player");
-    switchPlayer(); // Move to the next player
+    // console.log("switching player");
+    // switchPlayer(); // Move to the next player
+    // handleGuessResultModalConfirm();
+  };
+
+  const handleGuessResultModalConfirm = () => {
     calculateWinner();
 
     if (!clickedCards.includes(currentGuessIndex)) {
       setClickedCards([...clickedCards, currentGuessIndex]);
     }
+    setIsGuessResultModalOpen(false);
+    setCorrectGuess(false);
+    setScorePoints(0);
+    switchPlayer();
   };
 
   const renderScoreCards = () => {
@@ -233,12 +250,18 @@ const GameBoard = () => {
           onClose={() => setIsRevealLastCardModalOpen(false)}
           onReveal={handleLastCardReveal}
         />
+        <GuessResultModal 
+        isOpen={isGuessResultModalOpen} 
+        onConfirm={() => handleGuessResultModalConfirm()}
+        correctGuess={correctGuess}
+        points={scorePoints}
+        />
       </div>
-      {currentPlayer === 2 && gameMode === 'PvC' && (
+      {currentPlayer === 2 && gameMode === 'PvC' && !isGuessResultModalOpen && (
           <ComputerPlayer
             deck={deck}
             onCardClick={handleCardClick}
-            onGuessSubmit={handleGuessSubmit}
+            onGuessSubmit={(guess) => handleGuessSubmit(guess)}
             onClose={() => setIsGuessModalOpen(false)}
           />
       )}
