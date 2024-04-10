@@ -371,3 +371,14 @@ button:disabled {
   overflow-y: auto; /* Enables vertical scrolling if content exceeds max-height */
 }
 
+.game-guide {
+  margin-top: 50px;
+}
+
+.game-guide button {
+  margin-left: 10px;
+}
+
+.game-guide-modal {
+  text-align: left;
+}
