@@ -371,3 +371,23 @@ button:disabled {
   overflow-y: auto; /* Enables vertical scrolling if content exceeds max-height */
 }
 
+nav ul{
+  background-color: #000;
+  color: #fff;
+  display: flex;
+  justify-content: space-between; /* Ensures items are spaced between */
+  align-items: center;
+}
+
+.how-to-play-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 5px 10px;
+}
+
+.how-to-play-ul{
+  text-align: left;
+}
