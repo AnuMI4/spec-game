@@ -9,6 +9,7 @@ import RevealLastCardModal from "@/components/modals/RevealLastCardModal";
 import GuessResultModal from "./modals/GuessResultModal";
 import { validateGuessFormat } from "@/utils";
 import ComputerPlayer from "./ComputerPlayer";
+import InvalidMoveModal from "./modals/InvalidMoveModal";
 
 const GameBoard = () => {
   const {
@@ -46,6 +47,10 @@ const GameBoard = () => {
   const [scorePoints, setScorePoints] = useState(0);
   const [lastCard, setLastCard] = useState(null);
   const [cardIndex, setCardIndex] = useState(null);
+  const [isInvalidMoveModalOpen, setIsInvalidMoveModalOpen] = useState(false);
+  const [lastGuessesArray, setLastGuessesArray] = useState([]);
+
+  console.log(lastGuessesArray)
 
   const handleCardClick = (index) => {
     if (deck[index].revealed) return; // Prevent action on revealed cards
@@ -89,6 +94,7 @@ const GameBoard = () => {
       return;
     }
     setLastGuessedCard(guess);
+    setLastGuessesArray(prev => [...prev, guess])
 
     const card = deck[currentGuessIndex];
     const score = calculateScore(guess, card);
@@ -186,6 +192,19 @@ const GameBoard = () => {
     restartGame();
   };
 
+  const handleCall = () => {
+    const lastValue = lastGuessesArray.slice(-1)[0];
+    const secondLastValue = lastGuessesArray.slice(-2, -1)[0];
+    const isSuitSame = lastValue.slice(-1) === secondLastValue.slice(-1);
+    const isRankSame = lastValue.charAt(0) === secondLastValue.charAt(0);
+    setIsInvalidMoveModalOpen(true);
+    if (isSuitSame || isRankSame) {
+      const score = 1;
+      updateScore(currentPlayer, score);
+      setScorePoints(score);
+    }
+  }
+
   // Reset clicked cards and feedback when a new round starts
   useEffect(() => {
     setClickedCards([]);
@@ -225,7 +244,10 @@ const GameBoard = () => {
             </p>
           </div>
         </div>
-        <div className="turn">Player {currentPlayer}'s turn</div>
+        <div className="container-turn">
+          <div className="turn">Player {currentPlayer}'s turn</div>
+          <button className="call-invalid" onClick={handleCall}>Call invalid move</button>
+        </div>
         <div className="grid-container">
           <div className="game-board">{renderGridItems()}</div>
           <div className="score-cards-container">{renderScoreCards()}</div>
@@ -255,6 +277,11 @@ const GameBoard = () => {
         onConfirm={() => handleGuessResultModalConfirm()}
         correctGuess={correctGuess}
         points={scorePoints}
+        />
+        <InvalidMoveModal
+        isOpen={isInvalidMoveModalOpen}
+        onClose={() => setIsInvalidMoveModalOpen(false)}
+        lastGuessesArray={lastGuessesArray}
         />
       </div>
       {currentPlayer === 2 && gameMode === 'PvC' && !isGuessResultModalOpen && (

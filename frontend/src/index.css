@@ -382,3 +382,16 @@ button:disabled {
 .game-guide-modal {
   text-align: left;
 }
+
+.container-turn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.container-turn button {
+  margin-bottom: 10px;
+}
