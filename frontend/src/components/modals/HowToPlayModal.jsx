@@ -44,7 +44,7 @@ const HowToPlayModal = ({ isOpen, onClose }) => {
                 <h3>Special Rules</h3>
                 <ul className='how-to-play-ul'>
                     <li>Players cannot call the same card as the previous player or a card that has already been turned or a Joker if all five have been faced.</li>
-                    {/* <li>If a player mistakenly calls such a card, the first opponent to notice can claim the highest-valued scorecard from that player's won cards.</li> */}
+                    <li>If a player mistakenly calls such a card, the first opponent to notice can claim the highest-valued scorecard from that player's won cards.</li>
                 </ul>
 
                 <h3>Game Objective</h3>
