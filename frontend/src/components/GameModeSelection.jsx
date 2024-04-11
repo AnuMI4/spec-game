@@ -20,7 +20,7 @@ const GameModeSelection = () => {
 
   return (
     <>
-      <h1>Spec</h1>
+      <h1>SPEC</h1>
       <h1>Welcome to the Game</h1>
       <h2>Select Game Mode</h2>
       <div className="game-mode-selection">

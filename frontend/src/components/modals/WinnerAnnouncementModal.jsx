@@ -12,6 +12,7 @@ const WinnerAnnouncementModal = () => {
     prepareNextRound,
     currentRound,
     totalPlayers,
+    gameMode
   } = useGame();
 
   const isLastRound = useMemo(
@@ -29,6 +30,11 @@ const WinnerAnnouncementModal = () => {
     lastGuessedCards,
   });
 
+  const winnerText = (winner) => {
+    let text = (gameMode === 'PvC' && winner.slice(-1) === '2') ? 'Computer' : `${winner.slice(-1)}`;
+    return text;
+  }
+
   if (!isGameOver) return null;
 
   return (
@@ -39,7 +45,7 @@ const WinnerAnnouncementModal = () => {
         </h2>
 
         <p className="modal-message">
-          Congratulations, {winner ? `Player ${winner}` : "it's a tie!"}
+          Congratulations, {winner ? `Player ${winnerText(winner)}!` : "it's a tie!"}
         </p>
 
         {lastDeckCardImage && (
@@ -63,7 +69,7 @@ const WinnerAnnouncementModal = () => {
             const cardImage = cardImages[cardKey];
             return (
               <div key={index} className="player-guess">
-                <p>Player {index + 1}&apos;s Guess:</p>
+                <p>{gameMode === 'PvC' && index === 1 ? 'Computer Player' : `Player ${index + 1}`}&apos;s Guess:</p>
                 <img
                   className="card-image"
                   style={{ position: "sticky" , width: "100px", height: "150px"}}

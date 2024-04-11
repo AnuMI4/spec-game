@@ -21,7 +21,7 @@ function GameGuide ({ isOpen, onClose }) {
 	            <li>4 scorecards, if it is an actual joker</li>
             </ul>
             <p>When the last card is remaining, Player must reveal card and bonus scorecards must be awarded to the player according to the correctness of their initial predictions</p>
-            <b>Winning Bonus Scorecards on revealing the Last Card:</b>
+            <b>Winning Bonus Scorecards on revealing the Last Card</b>
             <p>Bonus should be awarded to: -</p>
             <ul>
                 <li>The player whose prediction matches the last card</li>
