@@ -2,7 +2,7 @@
   "homepage": "https://AnuMI4.github.io/spec-game",
   "scripts": {
     "predeploy": "npm run build",
-    "deplot": "gh-pages -d build",
+    "deploy": "gh-pages -d build",
     "test": "npx cypress run --headed --browser chrome --spec cypress/e2e/test-gameplay.cy.js"
   },
   "devDependencies": {
